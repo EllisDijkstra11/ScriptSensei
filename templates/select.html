@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Select Kanji</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+            <div class="block flexbox">
+                Number of kanji selected:
+                <div>
+                    <p id="numberOfButtons" style="margin: 0px; font-size: var(--larger); line-height: var(--larger);">0</p>
+                </div>
+                <button id="continue" class="flexbox" disabled>Continue</button>
+            </div>
+            <div class="flexbox">
+                <h1>Select kanji</h1>
+                Pick at least three kanji to practise
+            </div>
+        </div>
+        <div class="grid-container">
+            {% for character in kanji %}
+            <div class="grid-item">
+                <button class="kanji" id="{{ loop.index0 }}">
+                    {{ character[0] }}
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('button');
+        let selectedKanji = [];
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains("kanji")) {
+                    button.classList.toggle("clicked");
+                    updateselectedKanji();
+                }
+            });
+        });
+
+        function updateselectedKanji() {
+            selectedKanji = Array.from(document.getElementsByClassName("clicked")).map(button => button.id);
+            document.getElementById('numberOfButtons').innerHTML = selectedKanji.length;
+            document.getElementById('continue').disabled = selectedKanji.length < 3;
+        }
+
+        document.getElementById('continue').addEventListener('click', () => {
+            const queryString = new URLSearchParams({ selectedKanji: JSON.stringify(selectedKanji) });
+            window.location.href = `/overview?${queryString}`;
+        });
+    </script>
+</body>
+
+</html>

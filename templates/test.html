@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <title>My Webpage</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='style.css') }}">
+        <link href="https://fonts.cdnfonts.com/css/happy-lucky" rel="stylesheet">
+        <link href="https://fonts.cdnfonts.com/css/christmas-day" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="counter">
+                Number of kanji answered<span class="number">:</span>
+                <div>
+                    <p class="number" style="margin-top: 2vw; margin-bottom: 2vw; font-size: 4vw;"><span id="numberOfKanji">0</span>/<span id="totalNumberOfKanji">10</span></p>
+                </div>
+                <button href="/select">Skip</button>
+            </div>
+
+            Write the kanji for
+            <h1 id="random_kanji_display"></h1>
+        </div>
+        <div class="random-kanji">
+            <button id="show_next" onclick="showRandomKanji()">Next Random Kanji</button>
+        </div>
+
+        <script>
+            let selectedKanji;
+            let totalNumberOfKanji;
+
+            document.addEventListener('DOMContentLoaded', () => {
+                selectedKanji = JSON.parse('{{ selectedKanji|tojson|safe }}');
+                totalNumberOfKanji = selectedKanji.length
+                showRandomKanji();
+            });
+            
+            let currentRandomIndex = -1;
+            
+            function showRandomKanji(){
+                if (selectedKanji.length === 0) {
+                    window.location.href = '/test';
+                }
+
+                document.getElementById('numberOfKanji').innerHTML = totalNumberOfKanji - selectedKanji.length;
+                document.getElementById('totalNumberOfKanji').innerHTML = totalNumberOfKanji;
+                
+                currentRandomIndex = Math.floor(Math.random() * selectedKanji.length);
+                const randomKanji = selectedKanji[currentRandomIndex];
+
+                // document.getElementById('random_kanji_display').innerText = `${randomKanji}`;
+                fetch(`/get_svg_part?kanji=${encodeURIComponent(randomKanji)}&id=your_element_id`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('SVG not found');
+                        }
+                        return response.text();
+                    })
+                    .then(svgData => {
+                        document.getElementById('kanji_svg_display').innerHTML = svgData;
+                        document.getElementById('random_kanji_display').innerText = `${randomKanji}`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching SVG:', error);
+                    });
+
+                selectedKanji.splice(currentRandomIndex, 1);
+            }
+        </script>
+    </body>
+</html>

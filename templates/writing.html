@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Writing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+            <div class="block flexbox">
+                Number of kanji answered:
+                <div>
+                    <p style="line-height: var(--larger); font-size: var(--larger);"><span id="numberOfKanji"></span>/<span id="totalNumberOfKanji"></span>
+                    </p>
+                </div>
+                <button id="quit">Quit</button>
+            </div>
+            <div class="flexbox" style="height:30%;">
+                Write the kanji for
+            </div>
+            <div class="flexbox" style="height:60%">
+                <h2><span id="meaning_display"></span><br>
+                </h2>
+            </div>
+        </div>
+
+        <div class="content">
+            <svg id="canvas" class="flexbox"></svg>
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
+            <button id="clear" style="background-color: var(--light-blue);">Clear canvas</button>
+            <button id="skip_current" onclick="showRandomKanji()">Check kanji</button>
+        </div>
+    </div>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?v=3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="../static/strokeInput.js"></script>
+    <script>
+        let selectedKanji;
+        let totalNumberOfKanji;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            selectedKanji = JSON.parse('{{ selectedKanji|tojson|safe }}');
+            totalNumberOfKanji = selectedKanji.length
+            showRandomKanji();
+        });
+
+        document.getElementById('quit').addEventListener('click', () => {
+            window.location.href = `/select`;
+        });
+
+        let currentRandomIndex = -1;
+
+        function showRandomKanji() {
+            // if (selectedKanji.length === 0) {
+            //     window.location.href = '/select';
+            // }
+
+            document.getElementById('numberOfKanji').innerHTML = totalNumberOfKanji - selectedKanji.length;
+            document.getElementById('totalNumberOfKanji').innerHTML = totalNumberOfKanji;
+
+            currentRandomIndex = Math.floor(Math.random() * selectedKanji.length);
+            const randomKanji = selectedKanji[currentRandomIndex];
+            const meaning = randomKanji[1]
+
+            document.getElementById('meaning_display').innerText = `${meaning}`;
+            selectedKanji.splice(currentRandomIndex, 1);
+        }
+    </script>
+</body>
+
+</html>

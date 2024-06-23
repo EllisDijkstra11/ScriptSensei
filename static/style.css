@@ -1,0 +1,281 @@
+@font-face {
+  font-family: Happy Lucky;
+  src: url(happy-lucky.ttf);
+}
+
+:root {
+  --lightest-blue: rgb(197, 232, 243);
+  --light-blue: rgb(152, 218, 245);
+  --dark-blue: rgb(107, 204, 244);
+  --darkest-blue: rgb(70, 199, 244);
+  --lightest-pink: rgb(240, 204, 225);
+  --light-pink: rgb(229, 171, 205);
+  --pink: rgb(211, 138, 176);
+  --dark-pink: rgb(194, 108, 145);
+  --darkest-pink: rgb(174, 76, 112);
+  --dark-grey: rgb(100, 100, 100);
+  --extra-small: 1.5rem;
+  --small: 1.75rem;
+  --normal: 2.25rem;
+  --large: 3rem;
+  --larger: 4rem;
+  --extra-large: 5rem;
+}
+
+* {
+  box-sizing: border-box;
+
+  font-family: 'Happy Lucky', sans-serif;
+  font-weight: normal;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  font-size: var(--normal);
+  line-height: var(--normal);
+  text-align: center;
+  
+  background-color: var(--light-blue);
+}
+
+.main {
+  width: 750px;
+  height: fit-content;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  
+  padding: 5px;
+  margin: max(10px, auto);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+  background-color: white;
+  border: 10px solid white;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: var(--extra-large);
+  line-height: var(--extra-large);
+  margin: 0px;
+}
+
+h2 {
+  font-size: var(--larger);
+  line-height: var(--larger);
+  margin: 0px;
+}
+
+h3 {
+  font-size: var(--normal);
+  line-height: var(--normal);
+  margin: 0px;
+}
+
+h4 {
+  font-size: var(--small);
+  line-height: var(--small);
+  margin: 0px;
+}
+
+p {
+  display: block;
+  margin: 0px;
+  unicode-bidi: isolate;
+}
+
+.header {
+  height: 175px;
+  width: 100%;
+  
+  padding: 10px;
+  margin-bottom: 10px;
+  
+  background-color: var(--darkest-blue);
+  border-radius: 10px;
+  
+  text-align: center;
+}
+
+.block {
+  height: 100%;
+  aspect-ratio: 1;
+  
+  float: right;
+  padding: 5px;
+  
+  background-color: white;
+  border-radius: 10px;
+  
+  font-size: var(--extra-small);
+  line-height: var(--extra-small);
+  text-align: center;
+}
+
+.kanji {
+  width: 100%;
+  height: 100%;
+  
+  padding: 5px;
+  
+  border-width: 0px;
+  border-radius: 10px;
+  
+  font-size: var(--larger);
+  line-height: var(--larger);
+  text-decoration: none;
+  text-align: center;
+  
+  background-color: var(--lightest-blue);
+  color: black;
+}
+
+button {
+  height: 30px;
+  width: 80%;
+  
+  padding: 3px;
+  
+  border: none;
+  border-radius: 10px;
+  
+  background-color: var(--dark-pink);
+  color: black;
+  font-family: 'Happy Lucky', sans-serif;
+  font-size: var(--extra-small);
+  line-height: var(--extra-small);
+  
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--dark-pink);
+}
+
+button:disabled {
+  background-color: white;
+  color: grey;
+  border: 2px solid grey;
+}
+
+.clicked {
+  background-color: var(--darkest-blue);
+}
+
+.grid-container {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  
+  grid-template-columns: repeat(8, 1fr);
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+.number {
+  font-family: 'Christmas Day', sans-serif;
+}
+
+.overview {
+  width: 100%;
+  height: 150px;
+
+  text-align: left;
+  font-size: var(--large);
+  line-height: var(--large);
+  
+  background-color: var(--light-blue);
+  border-radius: 10px;
+  
+  padding: 10px;
+  
+  .block {
+    float: left;
+    vertical-align: middle;
+    margin-right: 10px;
+
+    font-size: var(--extra-large);
+    line-height: var(--extra-large);
+
+    color: var(--darkest-pink);
+  }
+}
+
+.flexbox {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.writing {
+  width: 80%;
+  aspect-ratio: 1;
+}
+
+#canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  cursor: crosshair;
+}
+
+svg {
+  pointer-events: all;
+}
+
+path, polyline {
+  fill: none;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-miterlimit: 10;
+}
+
+.table-condensed > tbody >tr > td, 
+.table-condensed > tbody >tr > th, 
+.table-condensed > thead >tr > td, 
+.table-condensed > thead >tr > th {
+  padding: 1px 4px;
+}
+
+.content { 
+  width: 80%; 
+  aspect-ratio: 1;
+  position: relative;
+
+  border-color: black;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+/* Hopefully unnecessary */
+
+.slider-row {
+  margin-top: 10px;
+  
+  div {
+    padding-right: 10px;
+  }
+  
+  input {
+    min-width: 150px;
+  }
+}
+
+.content {  
+  position: relative;
+  height: 100%;
+}

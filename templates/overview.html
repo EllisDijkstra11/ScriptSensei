@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Overview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+            <div class="block flexbox">
+                <button id="continue">Continue</button>
+            </div>
+            <div class="flexbox">
+                <h1>Overview</h1>
+                Study the kanji
+            </div>
+        </div>
+        {% for character in selectedKanji %}
+        <div class="overview">
+            <div class="flexbox block">
+                {{ character[0]}}
+            </div>
+            <div class="flexbox" style="text-align: left; align-items: start;">
+                <span style="color: var(--dark-grey);">Meaning:</span> {{ character[1] }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        let selectedKanji;
+        document.addEventListener('DOMContentLoaded', () => {
+            selectedKanji = JSON.parse('{{ selectedKanji|tojson|safe }}');
+            totalNumberOfKanji = selectedKanji.length
+        });
+
+        document.getElementById('continue').addEventListener('click', () => {
+            const queryString = new URLSearchParams({ selectedKanji: JSON.stringify(selectedKanji) });
+            window.location.href = `/writing?${queryString}`;
+        });
+    </script>
+</body>
+
+</html>
