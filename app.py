@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, jsonify, send_file, make_resp
 from markupsafe import escape
 from jinja2 import Environment, FileSystemLoader
 from kanji_list import kanji
+from kanjivg.kvg_lookup import find_svg
 import json
 
 app = Flask(__name__)
@@ -43,6 +44,17 @@ def writing():
 #     if selectedKanji:
 #         selectedKanji = json.loads(selectedKanji)
 #     return render_template('test.html', selectedKanji = selectedKanji)
+
+@app.route('/get-svg', methods=['POST'])
+def get_svg():
+    data = request.json
+    kanji_character = data.get('kanji')
+    svg_content = find_svg(kanji_character)
+    
+    if svg_content is None:
+        return jsonify({"error": "Kanji not found"}), 404
+    
+    return jsonify({"svg": svg_content})
 
 # Function to get the SVG path for the kanji character
 def get_svg_for_kanji(kanji):
