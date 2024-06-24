@@ -52,7 +52,21 @@ def get_svg():
     data = request.json
     kanji = data.get('kanji')
     kanji_path = commandFindSvg(kanji)
-    return kanji_path
+    svg_paths = extractSVGPaths(kanji_path)
+    return svg_paths    
 
+def extractSVGPaths(svg_path):
+    try:
+        tree = ET.parse(svg_path)  # Parse SVG file directly from path
+        root = tree.getroot()
+        paths = []
+        for elem in root.iter():
+            if elem.tag.endswith('path'):
+                paths.append(elem.attrib['d'])
+        return paths
+    except Exception as e:
+        print(f"Error parsing SVG file {svg_path}: {e}")
+        return []
+    
 if __name__ == "__main__":
     app.run(debug=True)
