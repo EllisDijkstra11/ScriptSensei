@@ -22,7 +22,6 @@ kanji = [
     # Basic natural elements
     ["日", "day, sun"],
     ["月", "moon, month"],
-    ["夕", "evening"],
     ["火", "fire"],
     ["水", "water"],
     ["木", "tree"],
@@ -90,5 +89,6 @@ kanji = [
     ["出", "exit"],
     ["円", "yen, circle"],
     ["天", "heaven"],
+    ["夕", "evening"],
     ["音", "sound"],
 ]
