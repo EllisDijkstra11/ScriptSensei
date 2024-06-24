@@ -36,6 +36,9 @@
             <button id="clear" style="background-color: var(--light-blue);">Clear canvas</button>
             <button id="skip_current" onclick="showRandomKanji()">Check kanji</button>
         </div>
+
+        <div id="kanjiCharacter" data-kanji="{{ kanji_character }}"></div>
+        <div id="svgResult"></div>
     </div>
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
@@ -45,6 +48,7 @@
     <script>
         let selectedKanji;
         let totalNumberOfKanji;
+        let currentRandomIndex = -1;
 
         document.addEventListener('DOMContentLoaded', () => {
             selectedKanji = JSON.parse('{{ selectedKanji|tojson|safe }}');
@@ -56,13 +60,12 @@
             window.location.href = `/select`;
         });
 
-        let currentRandomIndex = -1;
-
         function showRandomKanji() {
-            // if (selectedKanji.length === 0) {
-            //     window.location.href = '/select';
-            // }
+            if (selectedKanji.length === 0) {
+                window.location.href = '/select';
+            }
 
+            const kanji = document.getElementById('kanjiCharacter').dataset.kanji;
             document.getElementById('numberOfKanji').innerHTML = totalNumberOfKanji - selectedKanji.length;
             document.getElementById('totalNumberOfKanji').innerHTML = totalNumberOfKanji;
 
@@ -71,7 +74,30 @@
             const meaning = randomKanji[1]
 
             document.getElementById('meaning_display').innerText = `${meaning}`;
+            // document.getElementById('svgResult').innerHTML = (randomKanji[0]);
             selectedKanji.splice(currentRandomIndex, 1);
+
+            console.log(randomKanji[0]);
+            fetchSvg(randomKanji[0]);
+        }
+
+        function fetchSvg(kanji) {
+            fetch('/get-svg', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ kanji: kanji })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('svgResult').innerText = data.error;
+                } else {
+                    document.getElementById('svgResult').innerHTML = data.svg;
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>

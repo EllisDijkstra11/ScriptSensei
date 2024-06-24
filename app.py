@@ -2,10 +2,12 @@
 # python -m flask run --debug
 
 from flask import Flask, render_template, request, jsonify, send_file, make_response
+import xml.etree.ElementTree as ET
 from markupsafe import escape
 from jinja2 import Environment, FileSystemLoader
 from kanji_list import kanji
-from kanjivg.kvg_lookup import find_svg
+from kanjivg.kvg_lookup import commandFindSvg
+from xmlhandler import listSvgFiles
 import json
 
 app = Flask(__name__)
@@ -48,50 +50,9 @@ def writing():
 @app.route('/get-svg', methods=['POST'])
 def get_svg():
     data = request.json
-    kanji_character = data.get('kanji')
-    svg_content = find_svg(kanji_character)
-    
-    if svg_content is None:
-        return jsonify({"error": "Kanji not found"}), 404
-    
-    return jsonify({"svg": svg_content})
-
-# Function to get the SVG path for the kanji character
-def get_svg_for_kanji(kanji):
-    svg_directory = "./kanji"  # Directory where your SVG files are located
-    svg_filename = f"{kanji}.svg"  # Assuming SVG files are named by the kanji character
-    svg_path = os.path.join(svg_directory, svg_filename)
-    if os.path.isfile(svg_path):
-        return svg_path
-    else:
-        return None
-
-@app.route('/get_svg_part')
-def get_svg_part():
-    kanji = request.args.get('kanji')
-    element_id = request.args.get('id')
-    svg_path = get_svg_for_kanji(kanji)
-    
-    if not svg_path or not element_id:
-        return jsonify({"error": "SVG or element ID not found"}), 404
-    
-    try:
-        tree = ET.parse(svg_path)
-        root = tree.getroot()
-        
-        # Namespace handling (if any)
-        ns = {'svg': 'http://www.w3.org/2000/svg'}
-        
-        element = root.find(f".//*[@id='{element_id}']", ns)
-        
-        if element is None:
-            return jsonify({"error": "Element not found"}), 404
-        
-        element_string = ET.tostring(element, encoding='unicode')
-        return make_response(element_string)
-    
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    kanji = data.get('kanji')
+    kanji_path = commandFindSvg(kanji)
+    return kanji_path
 
 if __name__ == "__main__":
     app.run(debug=True)
