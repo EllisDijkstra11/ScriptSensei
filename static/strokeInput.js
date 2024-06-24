@@ -1,3 +1,6 @@
+let bestFits = [];
+export default bestFits;
+
 document.addEventListener('DOMContentLoaded', function () {
   // Get the IDs of interactive elements
   const canvas = document.getElementById('canvas');
@@ -7,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let drawing = false;
   let paths = [];
   let simplifiedPaths = [];
-  let bestFits = [];
   let bestFitsSVG = [];
   let times = [];
   let allFits = [];
@@ -273,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // For each point
     points.forEach(value => {
       // find the index in the path
-      index = path.findIndex(p => p === value.point);
+      let index = path.findIndex(p => p === value.point);
       
       // If the neighborhood fits completely in the array
       if (index - neighborhood >= 0 && index + neighborhood < path.length) {
@@ -423,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     let finalFits = []
     while (allFits.length != 0) {
-      currentPath = allFits[0];
+      let currentPath = allFits[0];
       finalFits.push(currentPath);
       allFits = allFits.filter(fit => fit.path.length > currentPath.path.length);
     }
@@ -482,7 +484,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Show the path on the canvas
     canvas.appendChild(path);
     return path;
-  }  
+  } 
  
   //Troep
   {
@@ -530,3 +532,4 @@ document.addEventListener('DOMContentLoaded', function () {
     return path;}  
   }
 });
+
