@@ -1,0 +1,25 @@
+class Stroke:
+    def __init__(self, order, direction):
+        self.order = order
+        self.direction = direction
+
+    def __repr__(self):
+        return f"Stroke(order={self.order}, direction={self.direction})"
+
+
+class Kanji:
+    def __init__(self):
+        self.strokes = []
+
+    def add_stroke(self, order, direction):
+        stroke = Stroke(order, direction)
+        self.strokes.append(stroke)
+
+    def get_stroke(self, index):
+        if 0 <= index < len(self.strokes):
+            return self.strokes[index]
+        else:
+            raise IndexError("Stroke index out of range")
+
+    def __repr__(self):
+        return f"Kanji(character='{self.character}', meaning='{self.meaning}', strokes={self.strokes})"

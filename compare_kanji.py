@@ -74,7 +74,6 @@ def compare_strokes():
             compare_vectors()
         else:
             delete_points()
-            
 
     print("Angle matches:\n", angle_matches, "\n", angle_differences, "\n\nLength matches:\n", length_matches, "\n", length_differences)
     
@@ -85,7 +84,7 @@ def compare_strokes():
     return False
 
 def compare_vectors(stroke):
-    global input, input_polar, template, template_polar, temp_input, temp_template
+    global temp_input, temp_template, temp_input_polar, temp_template_polar
 
     angle_matches = True
     length_matches = True
@@ -93,19 +92,29 @@ def compare_vectors(stroke):
     angle_differences = []
 
     for vector in range(len(temp_input[stroke])):
-        angle_difference = abs(temp_input[vector][0] - temp_template[vector][0])
-        length_difference = abs(temp_input[vector][1] - temp_template[vector][1])
+        angle_difference = abs(temp_input_polar[vector][0] - temp_template_polar[vector][0])
+        length_difference = abs(temp_input_polar[vector][1] - temp_template_polar[vector][1])
+
         if angle_difference > angle_tolerance:
             angle_matches = False
+
         if length_difference > length_tolerance:
             length_matches = False
+
         angle_differences.append(angle_difference)
         length_differences.append(length_difference)
     
     if not False in angle_matches and not False in length_matches:
         return True
+    
+    # Check if the direction is wrong
+    elif not False in length_matches:
+        return change_direction(compare_vectors)
 
     return False
+
+
+def change_direction():
 
 
 def delete_points():
