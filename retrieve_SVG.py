@@ -19,7 +19,7 @@ def svgPathToPoints(path_data):
     points = []
     
     if path:
-        points.append([segment.start.real, segment.start.imag])
+        points.append([path[0].start.real, path[0].start.imag])
 
     for segment in path:      
         if segment.end is not None:
