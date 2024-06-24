@@ -10,6 +10,7 @@ from kanji_list import kanji
 from kanjivg.kvg_lookup import commandFindSvg
 from xmlhandler import listSvgFiles
 from retrieve_SVG import extractSVGPaths, svgPathToPoints
+from compare_kanji import compare_kanji
 
 app = Flask(__name__)
 selectedKanji = []
@@ -48,19 +49,23 @@ def writing():
 #         selectedKanji = json.loads(selectedKanji)
 #     return render_template('test.html', selectedKanji = selectedKanji)
 
-@app.route('/get-svg', methods=['POST'])
-def get_svg():
+@app.route('/check_kanji', methods=['POST'])
+def check_kanji():
     data = request.json
     kanji = data.get('kanji')
+    input_array = data.get('array')
     kanji_path = commandFindSvg(kanji)
     svg_paths = extractSVGPaths(kanji_path)
-    print('SVG paths:', svg_paths)
+    print("hey", input_array)
 
-    svg_points = []
+    template_array = []
     for path in svg_paths:
-        svg_points.append(svgPathToPoints(path))
+        template_array.append(svgPathToPoints(path))
 
-    return svg_points  
+    compare_kanji(input_array, template_array)
+    return template_array
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

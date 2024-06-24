@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let paths = [];
   let simplifiedPaths = [];
   let bestFits = [];
+  let bestFitsSVG = [];
   let times = [];
   let allFits = [];
   let neighborhood = 3;
@@ -16,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let errorThreshold = 200;
 
   // Set values for the physical appearance of the strokes
-  const tolerance = 2.5;
   const strokeWidth = 10;
 
   // Add eventListeners to recognize the strokes
@@ -85,11 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function clearCanvas() {
     // Remove all paths from the canvas
     paths.forEach(path => path.remove());
-    bestFits.forEach(path => path.remove());
+    bestFitsSVG.forEach(path => path.remove());
 
     paths = [];
     simplifiedPaths = [];
-    bestFits = [];
+    bestFitsSVG = [];
     times = [];
     allFits = [];
   }
@@ -205,6 +205,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let curvatureCertainty = normalizeCertainty(findCurvatureCertainty(curvaturePoints,path));
     
     let bestFit = findBestFit(path, minimalFit, speedCertainty, curvatureCertainty).path;
+    let bestFitArray = []
+
+    for (let i = 0; i < bestFit.length; i++) {
+      bestFitArray.push(bestFit[i].point);
+    }
+
+    bestFits.push(bestFitArray)
+    document.getElementById("bestFits").setAttribute("array", bestFits);
+
     displayBestFit(bestFit);
   }
 
@@ -468,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function () {
     path.setAttribute('fill', 'none');
     
     // Add the path to the array
-    bestFits.push(path); 
+    bestFitsSVG.push(path); 
 
     // Show the path on the canvas
     canvas.appendChild(path);
