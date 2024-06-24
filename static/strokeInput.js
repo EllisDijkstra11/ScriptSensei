@@ -13,8 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let neighborhood = 3;
   let speedModifier = 0.6;
   let curveModifier = 1.5;
-  // let speedModifier = 0.8;
-  // let curveModifier = 1.5;
   let errorThreshold = 200;
 
   // Set values for the physical appearance of the strokes
@@ -87,25 +85,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function clearCanvas() {
     // Remove all paths from the canvas
     paths.forEach(path => path.remove());
+    bestFits.forEach(path => path.remove());
+
     paths = [];
     simplifiedPaths = [];
     bestFits = [];
     times = [];
     allFits = [];
-  }
-
-  // Remove all paths from the canvas and lists
-  function clearCanvas() {
-    // Remove all paths from the canvas
-    paths.forEach(path => path.remove());
-    simplifiedPaths.forEach(path => path.remove());
-    bestFits.forEach(path => path.remove());
-
-    // Empty all lists
-    paths = [];
-    simplifiedPaths = [];
-    bestFits = [];
-    times = [];
   }
 
   // Get the drawn strokes
@@ -481,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function () {
     path.setAttribute('stroke-width', strokeWidth);
     path.setAttribute('fill', 'none');
     
-    // Add the simplified path to the array
+    // Add the path to the array
     bestFits.push(path); 
 
     // Show the path on the canvas
