@@ -2,14 +2,14 @@
 # python -m flask run --debug
 
 from flask import Flask, render_template, request, jsonify, send_file, make_response
-import xml.etree.ElementTree as ET
 from markupsafe import escape
 from jinja2 import Environment, FileSystemLoader
-from svgpathtools import parse_path
+import json
+
 from kanji_list import kanji
 from kanjivg.kvg_lookup import commandFindSvg
 from xmlhandler import listSvgFiles
-import json
+from retrieve_SVG import extractSVGPaths, svgPathToPoints
 
 app = Flask(__name__)
 selectedKanji = []
@@ -61,32 +61,6 @@ def get_svg():
         svg_points.append(svgPathToPoints(path))
 
     return svg_points  
-
-def extractSVGPaths(svg_path):
-    try:
-        tree = ET.parse(svg_path)  # Parse SVG file directly from path
-        root = tree.getroot()
-        paths = []
-        for elem in root.iter():
-            if elem.tag.endswith('path'):
-                paths.append(elem.attrib['d'])
-        return paths
-    except Exception as e:
-        print(f"Error parsing SVG file {svg_path}: {e}")
-        return []
-    
-def svgPathToPoints(path_data):
-    path = parse_path(path_data)
-    points = []
-    
-    for segment in path:
-        if segment.start is not None:
-            points.append([segment.start.real, segment.start.imag])
-        
-        if segment.end is not None:
-            points.append([segment.end.real, segment.end.imag])
-    
-    return points
 
 if __name__ == "__main__":
     app.run(debug=True)
