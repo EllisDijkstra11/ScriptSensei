@@ -18,10 +18,10 @@ def svgPathToPoints(path_data):
     path = parse_path(path_data)
     points = []
     
-    for segment in path:
-        if segment.start is not None:
-            points.append([segment.start.real, segment.start.imag])
-        
+    if path:
+        points.append([segment.start.real, segment.start.imag])
+
+    for segment in path:      
         if segment.end is not None:
             points.append([segment.end.real, segment.end.imag])
     
