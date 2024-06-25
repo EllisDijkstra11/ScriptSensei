@@ -100,7 +100,7 @@ class Kanji:
         return self.input
 
     def add_stroke(self, vectors):
-        stroke = Stroke(vectors, self.input)
+        stroke = Stroke(vectors)
         self.strokes.append(stroke)
 
     def get_stroke(self, index):
