@@ -2,14 +2,13 @@ import math
 import numpy as np
 
 class Stroke:
-    def __init__(self, stroke, input):
+    def __init__(self, stroke):
         self.set_stroke(stroke)
 
-        # If it's an input character, assume being right; if it's a template character, set to True if checked
-        self.direction = input
-        self.order = input
-        self.count = input
-        self.shape = input
+        self.direction = False
+        self.order = False
+        self.count = False
+        self.shape = False
     
     def set_stroke(self, stroke):
         self.stroke = stroke
@@ -89,10 +88,9 @@ class Stroke:
         return polar_vectors
 
 class Kanji:
-    def __init__(self, strokes, input):
-        # If it's an input character, assume being right; if it's a template character, set to True if checked
-        self.input = input
-        self.count = input
+    def __init__(self, strokes):
+        self.input = False
+        self.count = False
         self.strokes = []
 
         for vectors in strokes:
