@@ -20,19 +20,23 @@ def compare_kanji(input_array, template_array):
     find_scale()
     scale_kanji()
 
+    difference_number_of_strokes = check_count()
     # Checks for the whole kanji
-    if check_count():
+    if difference_number_of_strokes == 0:
         input_kanji.set_count(True)
     template_kanji.set_count(True)
     
     # Checks for individual strokes
     current_strokes = 0
-    if input_kanji == True or input_kanji.get_strokes_length() < template_kanji.get_strokes_length():
+    if difference_number_of_strokes == 0:
+        current_strokes = input_kanji.get_strokes_length()
+    elif difference_number_of_strokes < 0:
         current_strokes = input_kanji.get_strokes_length()
     else:
         current_strokes = template_kanji.get_strokes_length()
     
     for stroke in range(current_strokes):
+        print("\nCurrent stroke:       " + str(stroke))
         current_input_stroke = input_kanji.get_stroke(stroke)
         current_template_stroke = template_kanji.get_stroke(stroke)
 
@@ -50,10 +54,6 @@ def compare_kanji(input_array, template_array):
             delete_points(current_input_stroke, current_template_stroke)
         else:
             current_template_stroke.set_shape(True)
-    
-    print("Count:", input_kanji.get_count())
-    print("Count:", input_kanji.get_stroke(0).get_count())
-    print("Direction:", input_kanji.get_stroke(0).get_direction())
 
 def find_scale():
     global input_kanji, template_kanji, scale
@@ -88,10 +88,19 @@ def scale_kanji():
 def check_count():
     global input_kanji, template_kanji
 
-    if input_kanji.get_strokes_length() == template_kanji.get_strokes_length():
-        return True
+    input_kanji_length = input_kanji.get_strokes_length()
+    template_kanji_length = template_kanji.get_strokes_length()
 
-    return False
+    difference = input_kanji_length - template_kanji_length
+
+    if difference == 0:
+        print("   Number of strokes:    Correct")
+    elif difference < 0:
+        print("   Number of strokes:    Too few (" + str(-difference) + ")")
+    else:
+        print("   Number of strokes:    Too many (" + str(difference) + ")")
+
+    return difference
 
 def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
     if input_stroke.get_stroke_length() == template_stroke.get_stroke_length():
@@ -105,8 +114,10 @@ def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     template_length = template_stroke.get_direction_vector()[1]
 
     if input_length * template_length * np.cos(angle_difference) > 0:
+        print("   Stroke direction:     Correct")
         return True
 
+    print("   Stroke direction:     Wrong")
     return False
 
 def check_shape(input_stroke: Stroke, template_stroke: Stroke):

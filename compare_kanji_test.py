@@ -97,13 +97,13 @@ class TestKanjiComparison(unittest.TestCase):
         self.assertTrue(kanji.template_kanji.get_count())
 
     def test_check_count(self):
-        self.assertTrue(kanji.check_count())
+        self.assertEqual(kanji.check_count(), 0)
 
         global input_data, wrong_data
         kanji.input_kanji = Kanji(input_data)
         kanji.template_kanji = Kanji(wrong_data)
         
-        self.assertFalse(kanji.check_count())
+        self.assertLess(kanji.check_count(), 0)
 
     def test_check_count_vectors(self):
         input_stroke = kanji.input_kanji.get_stroke(0)
