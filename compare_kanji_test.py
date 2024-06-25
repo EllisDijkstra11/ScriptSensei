@@ -76,7 +76,14 @@ class TestKanjiComparison(unittest.TestCase):
 
         kanji.input_kanji = Kanji(input_data)
         kanji.template_kanji = Kanji(template_data)
-        
+
+    def test_scaling(self):
+        tolerance = 1e-6
+        kanji.compare_kanji(input_data, template_data)
+        self.assertAlmostEqual(kanji.scale, 1, delta=tolerance)
+
+        kanji.compare_kanji(input_data, wrong_data)
+        self.assertAlmostEqual(kanji.scale, 3, delta=tolerance)
 
     def test_compare_kanji(self):
         global input_data, template_data, wrong_data

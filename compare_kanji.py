@@ -7,8 +7,8 @@ template_kanji = None
 wrong_kanji = None
 size = []
 
-length_scale = 0
-length_tolerance = 5
+scale = 0
+length_tolerance = 50
 angle_tolerance = 0.05
 
 def compare_kanji(input_array, template_array):
@@ -16,6 +16,9 @@ def compare_kanji(input_array, template_array):
 
     input_kanji = Kanji(input_array)
     template_kanji = Kanji(template_array)
+
+    find_scale()
+    scale_kanji()
 
     # Checks for the whole kanji
     check_count()
@@ -33,14 +36,45 @@ def compare_kanji(input_array, template_array):
 
         check_count_vectors(current_input_stroke, current_template_stroke)
         check_direction(current_input_stroke, current_template_stroke)
-        if current_input_stroke.get_count:
+        if current_input_stroke.get_count():
             check_shape(current_input_stroke, current_template_stroke)
         else:
-            delete_points(current_input_stroke, current_template_stroke)
+            # delete_points(current_input_stroke, current_template_stroke)
+            pass
     
     print("Count:", input_kanji.get_count())
     print("Count:", input_kanji.get_stroke(0).get_count())
     print("Direction:", input_kanji.get_stroke(0).get_direction())
+
+def find_scale():
+    global input_kanji, template_kanji, scale
+
+    input_x, input_y = find_min_max(input_kanji)
+    template_x, template_y = find_min_max(template_kanji)
+    
+    scale_x = template_x / input_x
+    scale_y = template_y / input_y
+
+    scale = max(scale_x, scale_y)
+
+def find_min_max(kanji):
+    all_points = [point for stroke in kanji.get_strokes() for point in stroke.get_stroke()]
+    all_x = [point[0] for point in all_points]
+    all_y = [point[1] for point in all_points]
+
+    min_x = min(all_x)
+    max_x = max(all_x)
+    min_y = min(all_y)
+    max_y = max(all_y)
+
+    return max_x - min_x, max_y - min_y
+
+def scale_kanji():
+    global input_kanji, scale
+
+    for stroke in input_kanji.get_strokes():
+        scaled_stroke = [[point[0] * scale, point[1] * scale] for point in stroke.get_stroke()]
+        stroke.set_stroke(scaled_stroke)
 
 def check_count():
     global input_kanji, template_kanji
@@ -89,10 +123,26 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
     # return False
 
 def delete_points(input_stroke: Stroke, template_stroke: Stroke):
-    input_vector = input_stroke.get_direction_vector()
-    reverse_input_vector = input_stroke.get_reverse_direction_vector()
+    global angle_tolerance, length_tolerance
+
+    input_vector = None
+    if input_stroke.get_direction():
+        input_vector = input_stroke.get_direction_vector()
+    else:
+        input_vector = input_stroke.get_reverse_direction_vector()
+
     template_vector = template_stroke.get_direction_vector()
-    
+
+    temp_input_vector = None
+    temp_template_vector = None
+
+    if abs(input_vector[0] - template_vector[0]) < angle_tolerance and abs(input_vector[1] - template_vector[1]) < length_tolerance:
+        for index in range(1, input_vector - 1):
+            temp_input_vector = input_vector.pop(index)
+            delete_points(temp_input_vector, )
+
+def find_stroke_points(stroke: Stroke):
+    pass
 
 # def compare_vectors(stroke):
 #     global temp_input, temp_template, temp_input_polar, temp_template_polar

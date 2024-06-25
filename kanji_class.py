@@ -23,6 +23,9 @@ class Stroke:
     def get_stroke(self):
         return self.stroke
     
+    def get_point(self, index):
+        return self.stroke[index]
+    
     def get_reverse_stroke(self):
         return self.reverse_stroke
 
