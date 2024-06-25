@@ -13,6 +13,7 @@ class Stroke:
         # If it's an input character, assume being right; if it's a template character, set to True if checked
         self.direction = input
         self.order = input
+        self.count = input
 
     def get_stroke(self):
         return self.stroke
@@ -43,6 +44,12 @@ class Stroke:
 
     def get_order(self):
         return self.order
+            
+    def set_count(self, count):
+        self.count = count
+
+    def get_count(self):
+        return self.count
     
     @staticmethod
     def find_vector_stroke(array):
