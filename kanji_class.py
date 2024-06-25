@@ -3,17 +3,20 @@ import numpy as np
 
 class Stroke:
     def __init__(self, stroke, input):
+        self.set_stroke(stroke)
+
+        # If it's an input character, assume being right; if it's a template character, set to True if checked
+        self.direction = input
+        self.order = input
+        self.count = input
+    
+    def set_stroke(self, stroke):
         self.stroke = stroke
         self.reverse_stroke = self.stroke.reverse()
         self.vector_stroke = self.find_vector_stroke(self.stroke)
         self.reverse_vector_stroke = self.find_vector_stroke(self.reverse_stroke)
         self.polar_stroke = self.find_polar_stroke(self.stroke)
         self.reverse_polar_stroke = self.find_polar_stroke(self.reverse_stroke)
-
-        # If it's an input character, assume being right; if it's a template character, set to True if checked
-        self.direction = input
-        self.order = input
-        self.count = input
 
     def get_stroke(self):
         return self.stroke
