@@ -9,6 +9,7 @@ class Stroke:
         self.direction = input
         self.order = input
         self.count = input
+        self.shape = input
     
     def set_stroke(self, stroke):
         self.stroke = stroke
@@ -53,6 +54,12 @@ class Stroke:
 
     def get_count(self):
         return self.count
+            
+    def set_shape(self, shape):
+        self.shape = shape
+
+    def get_shape(self):
+        return self.shape
     
     @staticmethod
     def find_vector_stroke(array):
