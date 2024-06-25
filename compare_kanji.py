@@ -1,63 +1,31 @@
-import numpy as np
-import math
 from pprint import pprint
+from kanji_class import Kanji
 
-input = []
-template = []
-input_polar = []
-template_polar = []
-temp_input = []
-temp_template = []
-temp_input_polar = []
-temp_template_polar = []
+input_kanji = None
+template_kanji = None
 size = []
 length_tolerance = 5
 angle_tolerance = 0.05
 
 def compare_kanji(input_array, template_array):
-    global input, input_polar, template, template_polar
-    input, input_polar = array_to_vector(input_array)
-    template, template_polar = array_to_vector(template_array)
+    global input_kanji, template_kanji
 
-    if len(input) == len(template):
-        boolean = compare_vectors()
-        print("Boolean", boolean)
+    input_kanji = Kanji(input_array, True)
+    template_kanji = Kanji(template_array, True)
 
-    print('input:', input_array, "\nvector:", input, '\ntemplate:', template_array, "\nvector:", template)
+    # Checks for the whole kanji
+    check_count()
 
-def array_to_vector(arrays):
-    vector_arrays = []
-    polar_arrays = []
+    # Checks for individual strokes
+    
 
-    for array in arrays:
-        vectors = []
-        polar_vectors = []
+def check_count():
+    global input_kanji, template_kanji
 
-        for i in range(len(array) - 1):
-            start = array[i]
-            end = array[i + 1]
-            vector = [end[0] - start[0], end[1] - start[1]]
-            vectors.append(vector)
+    if input_kanji.get_count(input_kanji) != template_kanji.get_count():
+        input_kanji.set_count(False)
 
-            angle, length = vector_to_polar(vector)
-            polar_vectors.append([angle, length])
-        vector_arrays.append(vectors)
-        polar_arrays.append(polar_vectors)
-
-    # Process each array of coordinates
-    return vector_arrays, polar_arrays
-
-def vector_to_polar(vector):
-    x, y = vector
-    length = float(np.sqrt(x**2 + y**2))
-    angle = float(np.arctan2(y, x))
-    return angle, length
-
-def normalize_vectors(vector):
-    length = math.sqrt(vector[0]**2 + vector[1]**2)
-    if length == 0:  # Avoid division by zero
-        return vector
-    return [vector[0] / length, vector[1] / length]
+    template_kanji.set_count(True)
 
 def compare_strokes():
     global input, input_polar, template, template_polar, temp_input, temp_template
@@ -109,13 +77,13 @@ def compare_vectors(stroke):
     
     # Check if the direction is wrong
     elif not False in length_matches:
-        return change_direction(compare_vectors)
+        return change_direction()
 
     return False
 
 
 def change_direction():
-
+    pass
 
 def delete_points():
     pass
