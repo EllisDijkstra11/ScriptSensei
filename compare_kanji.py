@@ -21,7 +21,9 @@ def compare_kanji(input_array, template_array):
     scale_kanji()
 
     # Checks for the whole kanji
-    check_count()
+    if check_count():
+        input_kanji.set_count(True)
+    template_kanji.set_count(True)
     
     # Checks for individual strokes
     current_strokes = 0
@@ -34,13 +36,20 @@ def compare_kanji(input_array, template_array):
         current_input_stroke = input_kanji.get_stroke(stroke)
         current_template_stroke = template_kanji.get_stroke(stroke)
 
-        check_count_vectors(current_input_stroke, current_template_stroke)
-        check_direction(current_input_stroke, current_template_stroke)
+        if check_count_vectors(current_input_stroke, current_template_stroke):
+            current_input_stroke.set_count(True)
+        current_template_stroke.set_count(True)
+
+        if check_direction(current_input_stroke, current_template_stroke):
+            current_input_stroke.set_direction(True)
+        current_template_stroke.set_direction(True)
+        
         if current_input_stroke.get_count():
             check_shape(current_input_stroke, current_template_stroke)
+        elif check_end_points(current_input_stroke, current_template_stroke):
+            delete_points(current_input_stroke, current_template_stroke)
         else:
-            # delete_points(current_input_stroke, current_template_stroke)
-            pass
+            current_template_stroke.set_shape(True)
     
     print("Count:", input_kanji.get_count())
     print("Count:", input_kanji.get_stroke(0).get_count())
@@ -80,15 +89,15 @@ def check_count():
     global input_kanji, template_kanji
 
     if input_kanji.get_strokes_length() == template_kanji.get_strokes_length():
-        input_kanji.set_count(True)
+        return True
 
-    template_kanji.set_count(True)
+    return False
 
 def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
     if input_stroke.get_stroke_length() == template_stroke.get_stroke_length():
-        input_stroke.set_count(True)
+        return True
 
-    template_stroke.set_count(True)
+    return False
 
 def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     angle_difference = abs(input_stroke.get_direction_vector()[0] - template_stroke.get_direction_vector()[0])
@@ -96,9 +105,9 @@ def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     template_length = template_stroke.get_direction_vector()[1]
 
     if input_length * template_length * np.cos(angle_difference) > 0:
-        input_stroke.set_direction(True)
-    
-    template_stroke.set_direction(True)
+        return True
+
+    return False
 
 def check_shape(input_stroke: Stroke, template_stroke: Stroke):     
     angle_matches = []
@@ -121,6 +130,22 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
     # elif not False in angle_matches:
     #     delete_points()
     # return False
+
+def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
+    global angle_tolerance, length_tolerance
+
+    input_vector = None
+    if input_stroke.get_direction():
+        input_vector = input_stroke.get_direction_vector()
+    else:
+        input_vector = input_stroke.get_reverse_direction_vector()
+
+    template_vector = template_stroke.get_direction_vector()
+
+    if abs(input_vector[0] - template_vector[0]) < angle_tolerance and abs(input_vector[1] - template_vector[1]) < length_tolerance:
+        return True
+    
+    return False
 
 def delete_points(input_stroke: Stroke, template_stroke: Stroke):
     global angle_tolerance, length_tolerance
