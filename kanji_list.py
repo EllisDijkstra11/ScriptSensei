@@ -49,7 +49,8 @@ kanji = [
     ["子", "child"],
     ["男", "man"],
     ["女", "woman"],
-    ["名前", "name"],
+    ["王", "king"],
+    ["名", "name"],
 
     # Animals
     ["犬", "dog"],
@@ -61,6 +62,7 @@ kanji = [
     ["玉", "jewel"],
     ["金", "gold, money"],
     ["本", "book"],
+    ["糸", "thread"],
 
     # Places and structures
     ["町", "town"],
@@ -91,4 +93,7 @@ kanji = [
     ["天", "heaven"],
     ["夕", "evening"],
     ["音", "sound"],
+    ["小", "small"],
+    ["中", "middle"],
+    ["大", "big"]
 ]
