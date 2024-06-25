@@ -101,10 +101,7 @@ class Stroke:
     @staticmethod
     def find_direction_vector(start, end):
         vector = [end[0] - start[0], end[1] - start[1]]
-        x, y = vector
-        length = float(np.sqrt(x**2 + y**2))
-        angle = float(np.arctan2(y, x))
-        return [angle, length]
+        return vector
 
 class Kanji:
     def __init__(self, strokes):

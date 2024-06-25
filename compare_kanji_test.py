@@ -14,6 +14,12 @@ template_data = [
     [[2, 2], [3, 3]]   # Second stroke of template kanji
 ]
 
+wrong_data = [
+    [[8, 3], [2, 3], [4, 1]],
+    [[3, 2], [1, 6], [5, 7]],
+    [[5, 6], [10, 2]]
+]
+
 class TestStrokeTypes(unittest.TestCase):
     
     def setUp(self):
@@ -66,20 +72,34 @@ class TestStrokeTypes(unittest.TestCase):
 class TestKanjiComparison(unittest.TestCase):
     
     def setUp(self):
+        global input_data, template_data
 
         kanji.input_kanji = Kanji(input_data)
         kanji.template_kanji = Kanji(template_data)
+        
 
     def test_compare_kanji(self):
-        global input_data, template_data
+        global input_data, template_data, wrong_data
 
         kanji.compare_kanji(input_data, template_data)
         self.assertTrue(kanji.input_kanji.get_count())
+        self.assertTrue(kanji.template_kanji.get_count())
+        
+        kanji.compare_kanji(input_data, wrong_data)
+        self.assertFalse(kanji.input_kanji.get_count())
         self.assertTrue(kanji.template_kanji.get_count())
 
     def test_check_count(self):
         kanji.check_count()
         self.assertTrue(kanji.input_kanji.get_count())
+        self.assertTrue(kanji.template_kanji.get_count())
+
+        global input_data, wrong_data
+        kanji.input_kanji = Kanji(input_data)
+        kanji.template_kanji = Kanji(wrong_data)
+        
+        kanji.check_count()
+        self.assertFalse(kanji.input_kanji.get_count())
         self.assertTrue(kanji.template_kanji.get_count())
 
     def test_check_count_vectors(self):
@@ -89,6 +109,36 @@ class TestKanjiComparison(unittest.TestCase):
         kanji.check_count_vectors(input_stroke, template_stroke)
         self.assertTrue(input_stroke.get_count())
         self.assertTrue(template_stroke.get_count())
+
+        global input_data, wrong_data
+        kanji.input_kanji = Kanji(input_data)
+        kanji.template_kanji = Kanji(wrong_data)
+
+        input_stroke = kanji.input_kanji.get_stroke(0)
+        template_stroke = kanji.template_kanji.get_stroke(0)
+
+        kanji.check_count_vectors(input_stroke, template_stroke)
+        self.assertFalse(input_stroke.get_count())
+        self.assertTrue(template_stroke.get_count())
+
+    def test_check_direction(self):
+        input_stroke = kanji.input_kanji.get_stroke(0)
+        template_stroke = kanji.template_kanji.get_stroke(0)
+
+        kanji.check_direction(input_stroke, template_stroke)
+        self.assertTrue(input_stroke.get_direction())
+        self.assertTrue(template_stroke.get_direction())
+
+        global input_data, wrong_data
+        kanji.input_kanji = Kanji(input_data)
+        kanji.template_kanji = Kanji(wrong_data)
+
+        input_stroke = kanji.input_kanji.get_stroke(0)
+        template_stroke = kanji.template_kanji.get_stroke(0)
+
+        kanji.check_direction(input_stroke, template_stroke)
+        self.assertFalse(input_stroke.get_direction())
+        self.assertTrue(template_stroke.get_direction())
 
     def test_stroke_variables(self):
         stroke = Stroke([[0, 0], [1, 1]])

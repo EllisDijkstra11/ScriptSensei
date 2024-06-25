@@ -1,8 +1,10 @@
+import numpy as np
 from pprint import pprint
 from kanji_class import Kanji, Stroke
 
 input_kanji = None
 template_kanji = None
+wrong_kanji = None
 size = []
 length_tolerance = 5
 angle_tolerance = 0.05
@@ -28,6 +30,7 @@ def compare_kanji(input_array, template_array):
         current_template_stroke = template_kanji.get_stroke(stroke)
 
         check_count_vectors(current_input_stroke, current_template_stroke)
+        check_direction(current_input_stroke, current_template_stroke)
 
 def check_count():
     global input_kanji, template_kanji
@@ -43,6 +46,17 @@ def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
 
     template_stroke.set_count(True)
 
+def check_direction(input_stroke: Stroke, template_stroke: Stroke):
+    input_vector = input_stroke.get_direction_vector()
+    template_vector = template_stroke.get_direction_vector()
+
+    dot_product = input_vector[0] * template_vector[0] + input_vector[1] * template_vector[1]
+
+    print(dot_product)
+    if dot_product > 0:
+        input_stroke.set_direction(True)
+    
+    template_stroke.set_direction(True)
 
 # def compare_strokes():
 #     global input, input_polar, template, template_polar, temp_input, temp_template
