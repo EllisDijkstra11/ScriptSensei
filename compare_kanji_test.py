@@ -150,3 +150,35 @@ class TestKanjiComparison(unittest.TestCase):
     def test_kanji_variables(self):
         self.assertEqual(len(kanji.input_kanji.get_strokes()), 2)
         self.assertEqual(kanji.input_kanji.get_strokes_length(), 2)
+
+class TestCheckShape(unittest.TestCase):
+
+    def test_check_shape_true(self):
+        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        
+        self.assertTrue(kanji.check_shape(input_stroke, template_stroke))
+
+    def test_check_shape_false_due_to_angle(self):
+        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/3, 2], [np.pi/2, 3]])
+        
+        self.assertFalse(kanji.check_shape(input_stroke, template_stroke))
+
+    def test_check_shape_false_due_to_length(self):
+        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/4, 2 + kanji.length_tolerance*1.1], [np.pi/2, 3]])
+        
+        self.assertFalse(kanji.check_shape(input_stroke, template_stroke))
+
+    def test_check_shape_edge_case_angle_tolerance(self):
+        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/4 + kanji.angle_tolerance/2, 2], [np.pi/2, 3]])
+        
+        self.assertTrue(kanji.check_shape(input_stroke, template_stroke))
+
+    def test_check_shape_edge_case_length_tolerance(self):
+        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/4, 2 + kanji.length_tolerance/2], [np.pi/2, 3]])
+        
+        self.assertTrue(kanji.check_shape(input_stroke, template_stroke))

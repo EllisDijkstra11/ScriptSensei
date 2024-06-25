@@ -9,7 +9,7 @@ size = []
 
 scale = 0
 length_tolerance = 50
-angle_tolerance = 0.05
+angle_tolerance = 0.1
 
 def compare_kanji(input_array, template_array):
     global input_kanji, template_kanji
@@ -43,7 +43,7 @@ def compare_kanji(input_array, template_array):
         if check_direction(current_input_stroke, current_template_stroke):
             current_input_stroke.set_direction(True)
         current_template_stroke.set_direction(True)
-        
+
         if current_input_stroke.get_count():
             check_shape(current_input_stroke, current_template_stroke)
         elif check_end_points(current_input_stroke, current_template_stroke):
@@ -109,11 +109,15 @@ def check_direction(input_stroke: Stroke, template_stroke: Stroke):
 
     return False
 
-def check_shape(input_stroke: Stroke, template_stroke: Stroke):     
-    angle_matches = []
-    length_matches = []
-    length_differences = []
-    angle_differences = []
+def check_shape(input_stroke: Stroke, template_stroke: Stroke):
+    for point in range(input_stroke.get_stroke_length()):
+        input_vector = input_stroke.get_point(point)
+        template_vector = template_stroke.get_point(point)
+        angle_difference = abs(input_vector[0] - template_vector[0])
+        if min(angle_difference, 2 * np.pi - angle_difference) > angle_tolerance or abs(input_vector[1] - template_vector[1]) > length_tolerance:
+            return False
+    
+    return True        
 
     # for stroke in range(len(input)):
     #     if len(input[stroke]) == len(template[stroke]):
@@ -142,7 +146,8 @@ def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
 
     template_vector = template_stroke.get_direction_vector()
 
-    if abs(input_vector[0] - template_vector[0]) < angle_tolerance and abs(input_vector[1] - template_vector[1]) < length_tolerance:
+    angle_difference = abs(input_vector[0] - template_vector[0])
+    if min(angle_difference, 2 * np.pi - angle_difference) < angle_tolerance and abs(input_vector[1] - template_vector[1]) < length_tolerance:
         return True
     
     return False
