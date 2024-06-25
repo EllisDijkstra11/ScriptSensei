@@ -34,8 +34,6 @@ def overview():
     for index in sendIndex:
         selectedKanji.append(kanji[int(index)])
 
-    print(selectedKanji)
-
     return render_template('overview.html', selectedKanji = selectedKanji)
 
 @app.route("/writing")
@@ -56,7 +54,6 @@ def check_kanji():
     input_array = data.get('array')
     kanji_path = commandFindSvg(kanji)
     svg_paths = extractSVGPaths(kanji_path)
-    print("hey", input_array)
 
     template_array = []
     for path in svg_paths:

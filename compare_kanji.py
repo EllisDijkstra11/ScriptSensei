@@ -119,22 +119,6 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
     
     return True        
 
-    # for stroke in range(len(input)):
-    #     if len(input[stroke]) == len(template[stroke]):
-    #         temp_input = input[stroke]
-    #         temp_template = template[stroke]
-    #         compare_vectors()
-    #     else:
-    #         delete_points()
-
-    # print("Angle matches:\n", angle_matches, "\n", angle_differences, "\n\nLength matches:\n", length_matches, "\n", length_differences)
-    
-    # if not False in angle_matches and not False in length_matches:
-    #     return True
-    # elif not False in angle_matches:
-    #     delete_points()
-    # return False
-
 def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     global angle_tolerance, length_tolerance
 
