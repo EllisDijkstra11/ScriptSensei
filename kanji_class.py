@@ -18,6 +18,7 @@ class Stroke:
         self.polar_stroke = self.find_polar_stroke(self.vector_stroke)
         self.reverse_polar_stroke = self.find_polar_stroke(self.reverse_vector_stroke)
         self.direction_vector = self.find_direction_vector(self.stroke[0], self.stroke[-1])
+        self.reverse_direction_vector = self.find_direction_vector(self.reverse_stroke[0], self.reverse_stroke[-1])
 
     def get_stroke(self):
         return self.stroke
@@ -39,6 +40,9 @@ class Stroke:
     
     def get_direction_vector(self):
         return self.direction_vector
+
+    def get_reverse_direction_vector(self):
+        return self.reverse_direction_vector
     
     def get_stroke_length(self):
         return len(self.stroke)
@@ -101,7 +105,10 @@ class Stroke:
     @staticmethod
     def find_direction_vector(start, end):
         vector = [end[0] - start[0], end[1] - start[1]]
-        return vector
+        x, y = vector
+        length = float(np.sqrt(x**2 + y**2))
+        angle = float(np.arctan2(y, x))
+        return [angle, length]
 
 class Kanji:
     def __init__(self, strokes):

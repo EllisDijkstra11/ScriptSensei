@@ -6,6 +6,8 @@ input_kanji = None
 template_kanji = None
 wrong_kanji = None
 size = []
+
+length_scale = 0
 length_tolerance = 5
 angle_tolerance = 0.05
 
@@ -31,6 +33,14 @@ def compare_kanji(input_array, template_array):
 
         check_count_vectors(current_input_stroke, current_template_stroke)
         check_direction(current_input_stroke, current_template_stroke)
+        if current_input_stroke.get_count:
+            check_shape(current_input_stroke, current_template_stroke)
+        else:
+            delete_points(current_input_stroke, current_template_stroke)
+    
+    print("Count:", input_kanji.get_count())
+    print("Count:", input_kanji.get_stroke(0).get_count())
+    print("Direction:", input_kanji.get_stroke(0).get_direction())
 
 def check_count():
     global input_kanji, template_kanji
@@ -47,40 +57,42 @@ def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
     template_stroke.set_count(True)
 
 def check_direction(input_stroke: Stroke, template_stroke: Stroke):
-    input_vector = input_stroke.get_direction_vector()
-    template_vector = template_stroke.get_direction_vector()
+    angle_difference = abs(input_stroke.get_direction_vector()[0] - template_stroke.get_direction_vector()[0])
+    input_length = input_stroke.get_direction_vector()[1]
+    template_length = template_stroke.get_direction_vector()[1]
 
-    dot_product = input_vector[0] * template_vector[0] + input_vector[1] * template_vector[1]
-
-    print(dot_product)
-    if dot_product > 0:
+    if input_length * template_length * np.cos(angle_difference) > 0:
         input_stroke.set_direction(True)
     
     template_stroke.set_direction(True)
 
-# def compare_strokes():
-#     global input, input_polar, template, template_polar, temp_input, temp_template
+def check_shape(input_stroke: Stroke, template_stroke: Stroke):     
+    angle_matches = []
+    length_matches = []
+    length_differences = []
+    angle_differences = []
 
-#     angle_matches = []
-#     length_matches = []
-#     length_differences = []
-#     angle_differences = []
+    # for stroke in range(len(input)):
+    #     if len(input[stroke]) == len(template[stroke]):
+    #         temp_input = input[stroke]
+    #         temp_template = template[stroke]
+    #         compare_vectors()
+    #     else:
+    #         delete_points()
 
-#     for stroke in range(len(input)):
-#         if len(input[stroke]) == len(template[stroke]):
-#             temp_input = input[stroke]
-#             temp_template = template[stroke]
-#             compare_vectors()
-#         else:
-#             delete_points()
-
-#     print("Angle matches:\n", angle_matches, "\n", angle_differences, "\n\nLength matches:\n", length_matches, "\n", length_differences)
+    # print("Angle matches:\n", angle_matches, "\n", angle_differences, "\n\nLength matches:\n", length_matches, "\n", length_differences)
     
-#     if not False in angle_matches and not False in length_matches:
-#         return True
-#     elif not False in angle_matches:
-#         delete_points()
-#     return False
+    # if not False in angle_matches and not False in length_matches:
+    #     return True
+    # elif not False in angle_matches:
+    #     delete_points()
+    # return False
+
+def delete_points(input_stroke: Stroke, template_stroke: Stroke):
+    input_vector = input_stroke.get_direction_vector()
+    reverse_input_vector = input_stroke.get_reverse_direction_vector()
+    template_vector = template_stroke.get_direction_vector()
+    
 
 # def compare_vectors(stroke):
 #     global temp_input, temp_template, temp_input_polar, temp_template_polar
