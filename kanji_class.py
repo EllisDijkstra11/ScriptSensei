@@ -4,7 +4,7 @@ import numpy as np
 class Stroke:
     def __init__(self, stroke, input):
         self.stroke = stroke
-        self.reverse_stroke = self.find_reverse_stroke(self.stroke)
+        self.reverse_stroke = self.stroke.reverse()
         self.vector_stroke = self.find_vector_stroke(self.stroke)
         self.reverse_vector_stroke = self.find_vector_stroke(self.reverse_stroke)
         self.polar_stroke = self.find_polar_stroke(self.stroke)
@@ -67,13 +67,6 @@ class Stroke:
             polar_vectors.append([angle, length])
 
         return polar_vectors
-
-    @staticmethod
-    def find_reverse_stroke(stroke):
-        reverse_stroke = []
-        for point in stroke:
-            reverse_stroke.insert(0, point)
-        return reverse_stroke
 
 class Kanji:
     def __init__(self, strokes, input):
