@@ -36,6 +36,9 @@ class Stroke:
     
     def get_reverse_polar_stroke(self):
         return self.reverse_polar_stroke
+    
+    def get_stroke_length(self):
+        return len(self.stroke)
 
     def set_direction(self, direction):
         self.direction = direction
@@ -92,14 +95,14 @@ class Kanji:
         self.count = input
         self.strokes = []
 
-        for stroke in strokes:
-            self.add_stroke(stroke)
+        for vectors in strokes:
+            self.add_stroke(vectors)
 
     def get_input(self):
         return self.input
 
-    def add_stroke(self, stroke):
-        stroke = Stroke(stroke, self.input)
+    def add_stroke(self, vectors):
+        stroke = Stroke(vectors, self.input)
         self.strokes.append(stroke)
 
     def get_stroke(self, index):
@@ -110,6 +113,9 @@ class Kanji:
     
     def get_strokes(self):
         return self.strokes
+    
+    def get_strokes_length(self):
+        return len(self.strokes)
     
     def set_count(self, count):
         self.count = count
