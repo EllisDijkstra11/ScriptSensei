@@ -60,7 +60,7 @@ kanji = [
     ["車", "car, vehicle"],
     ["玉", "jewel"],
     ["金", "gold, money"],
-    ["本", "book"]
+    ["本", "book"],
 
     # Places and structures
     ["町", "town"],
