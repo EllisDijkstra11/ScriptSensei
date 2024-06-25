@@ -12,7 +12,9 @@ class Stroke:
     
     def set_stroke(self, stroke):
         self.stroke = stroke
-        self.reverse_stroke = self.stroke.reverse()
+        print(self.stroke)
+        self.reverse_stroke = self.find_reverse_stroke(self.stroke)
+        print(self.reverse_stroke)
         self.vector_stroke = self.find_vector_stroke(self.stroke)
         self.reverse_vector_stroke = self.find_vector_stroke(self.reverse_stroke)
         self.polar_stroke = self.find_polar_stroke(self.stroke)
@@ -62,6 +64,13 @@ class Stroke:
 
     def get_shape(self):
         return self.shape
+    
+    @staticmethod
+    def find_reverse_stroke(stroke):
+        reverse_stroke = []
+        for point in stroke:
+            reverse_stroke.insert(0, point)
+        return reverse_stroke
     
     @staticmethod
     def find_vector_stroke(array):
