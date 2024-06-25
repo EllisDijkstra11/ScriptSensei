@@ -12,13 +12,11 @@ class Stroke:
     
     def set_stroke(self, stroke):
         self.stroke = stroke
-        print(self.stroke)
         self.reverse_stroke = self.find_reverse_stroke(self.stroke)
-        print(self.reverse_stroke)
         self.vector_stroke = self.find_vector_stroke(self.stroke)
         self.reverse_vector_stroke = self.find_vector_stroke(self.reverse_stroke)
-        self.polar_stroke = self.find_polar_stroke(self.stroke)
-        self.reverse_polar_stroke = self.find_polar_stroke(self.reverse_stroke)
+        self.polar_stroke = self.find_polar_stroke(self.vector_stroke)
+        self.reverse_polar_stroke = self.find_polar_stroke(self.reverse_vector_stroke)
 
     def get_stroke(self):
         return self.stroke
@@ -85,11 +83,11 @@ class Stroke:
         return vectors
 
     @staticmethod
-    def find_polar_stroke(array):
+    def find_polar_stroke(vectors):
         polar_vectors = []
 
-        for i in range(len(array) - 1):
-            x, y = array[i]
+        for i in range(len(vectors)):
+            x, y = vectors[i]
             length = float(np.sqrt(x**2 + y**2))
             angle = float(np.arctan2(y, x))
             polar_vectors.append([angle, length])
