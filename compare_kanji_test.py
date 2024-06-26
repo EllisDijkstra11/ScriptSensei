@@ -39,9 +39,9 @@ too_few_strokes_data_wrong_order = [
 ]
 
 too_many_strokes_data_wrong_order = [
-    [[4, 4], [5, 5]]   # Extra third stroke
+    [[4, 4], [5, 5]],   # Extra third stroke
     [[0, 0], [1, 1]],  # First stroke of input kanji
-    [[2, 2], [3, 3]],  # Second stroke of input kanji
+    [[2, 2], [3, 3]]  # Second stroke of input kanji
 ]
 
 template_data = [
@@ -283,7 +283,6 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': False,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
             ]
         }
         self.compare_and_assert(too_few_strokes_data, correct_data, expected_output)
@@ -304,7 +303,6 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': False,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
             ]
         }
         self.compare_and_assert(too_few_strokes_data_wrong_order, correct_data, expected_output)

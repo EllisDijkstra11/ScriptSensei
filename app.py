@@ -49,6 +49,7 @@ def writing():
 
 @app.route('/check_kanji', methods=['POST'])
 def check_kanji():
+    print("I'm here")
     data = request.json
     kanji = data.get('kanji')
     input_array = data.get('array')

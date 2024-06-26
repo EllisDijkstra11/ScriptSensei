@@ -13,6 +13,7 @@ length_tolerance = 50
 angle_tolerance = 0.1
 
 def compare_kanji(input_array, template_array):
+    print("I'm here now")
     global input_kanji, template_kanji
 
     input_kanji = Kanji(input_array)
@@ -59,6 +60,8 @@ def compare_kanji(input_array, template_array):
             compare_vectors(current_input_stroke, current_template_stroke)
         else:
             print("   Stroke does not match")
+    
+    return find_score()
 
 def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
         # If the strokes consist of an equal number of vectors
@@ -83,7 +86,7 @@ def find_scale():
     scale_x = template_x / input_x
     scale_y = template_y / input_y
 
-    scale = max(scale_x, scale_y)
+    scale = min(scale_x, scale_y)
 
 def find_min_max(kanji):
     all_points = [point for stroke in kanji.get_strokes() for point in stroke.get_stroke()]
@@ -227,3 +230,20 @@ def find_temp_vectors(points):
             subset_points = [points[0]] + [points[i] for i in subset] + [points[-1]]
             subsets.append(subset_points)
     return subsets
+
+def find_score():
+    score = []
+
+    count = input_kanji.get_count()
+    direction = []
+    order = []
+    shape = []
+
+    for index in range(input_kanji.get_strokes_length()):
+        stroke: Stroke = input_kanji.get_stroke(index)
+        direction.append(stroke.get_direction())
+        order.append(stroke.get_order())
+        shape.append(stroke.get_shape_score())
+    
+    score.append(count).append(direction).append(order).append(shape)
+    return score
