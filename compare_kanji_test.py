@@ -54,6 +54,11 @@ uniform_scaling_data = [
     [[4, 4], [8, 8]]      # Second stroke uniformly scaled
 ]
 
+too_many_points_data = [
+    [[0, 0], [4, 4], [5, 5], [1, 1]],  # First stroke of input kanji
+    [[2, 2], [3, 3]]  # Second stroke of input kanji
+]
+
 template_data = [
     [[0, 0], [1, 1]],  # First stroke of template kanji
     [[2, 2], [3, 3]]   # Second stroke of template kanji
@@ -338,3 +343,13 @@ class TestStrokeMistakes(unittest.TestCase):
             ]
         }
         self.compare_and_assert(uniform_scaling_data, correct_data, expected_output)
+    
+    def test_too_many_points(self):
+        expected_output = {
+            'count': False,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 5, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+            ]
+        }
+        self.compare_and_assert(too_many_points_data, correct_data, expected_output)
