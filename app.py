@@ -60,8 +60,12 @@ def check_kanji():
     for path in svg_paths:
         template_array.append(svgPathToPoints(path))
 
-    compare_kanji(input_array, template_array)
-    return template_array
+    print("input_data =", input_array)
+    print("\n")
+    print("template_data =", template_array)
+    feedback = compare_kanji(input_array, template_array)
+    print(feedback)
+    return feedback
 
 
 

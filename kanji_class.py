@@ -193,9 +193,12 @@ class Kanji:
         return self.count
     
     def add_size(self, size):
-        self.size.append[size]
+        self.size.append(size)
     
     def get_size(self, size_tolerance):
+        if len(self.size) == 0:
+            return 0
+        
         count = 0
         average = sum(self.size) / len(self.size)  # Calculate average size
 

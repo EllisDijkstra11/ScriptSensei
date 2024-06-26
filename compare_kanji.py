@@ -9,7 +9,7 @@ wrong_kanji = None
 
 scale = 0
 size_tolerance = 0.1
-angle_tolerance = 0.1
+angle_tolerance = 0.15
 
 def compare_kanji(input_array, template_array):
     print("I'm here now")
@@ -145,6 +145,7 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
         input_vector = input_stroke.get_point(point)
         template_vector = template_stroke.get_point(point)
         angle_difference = abs(input_vector[0] - template_vector[0])
+        print(angle_difference)
         if min(angle_difference, 2 * np.pi - angle_difference) > angle_tolerance:
             return False
 
@@ -170,6 +171,7 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
     input_kanji.add_size(average)
 
     for point in size:
+        print("size:", abs(point - average))
         if abs(point - average) > size_tolerance:
             return False
     
@@ -182,6 +184,7 @@ def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     template_vector = template_stroke.get_direction_vector()
 
     angle_difference = abs(input_vector[0] - template_vector[0])
+    print("angle:", min(angle_difference, 2 * np.pi - angle_difference))
     if min(angle_difference, 2 * np.pi - angle_difference) < angle_tolerance:
         return True
     
