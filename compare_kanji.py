@@ -26,42 +26,41 @@ def compare_kanji(input_array, template_array):
         input_kanji.set_count(True)
     template_kanji.set_count(True)
     
-    # Checks for individual strokes
-    current_strokes = 0
-    if difference_number_of_strokes == 0:
-        current_strokes = input_kanji.get_strokes_length()
-    elif difference_number_of_strokes < 0:
-        current_strokes = input_kanji.get_strokes_length()
-    else:
-        current_strokes = template_kanji.get_strokes_length()
-    
-    for stroke in range(current_strokes):
-        print("\nCurrent stroke:       " + str(stroke))
-        current_input_stroke: Stroke = input_kanji.get_stroke(stroke)
-        current_template_stroke: Stroke = template_kanji.get_stroke(stroke)
-
-        if check_count_vectors(current_input_stroke, current_template_stroke):
-            current_input_stroke.set_count(True)
-        current_template_stroke.set_count(True)
-
-        if check_size(current_input_stroke, current_template_stroke):
-            current_input_stroke.set_size(True)
-        current_template_stroke.set_size(True)
+    matched_stroke_indexes = []
+    for stroke_index in range(min(input_kanji.get_strokes_length(), template_kanji.get_strokes_length())):
+        print("\nCurrent stroke:       " + str(stroke_index))
+        current_input_stroke: Stroke = input_kanji.get_stroke(stroke_index)
+        current_template_stroke: Stroke = template_kanji.get_stroke(stroke_index)
 
         if check_direction(current_input_stroke, current_template_stroke):
             current_input_stroke.set_direction(True)
         else:
-            current_input_stroke = Stroke(input_kanji.get_reverse_stroke(stroke))
+            current_input_stroke.reverse_strokes()
         current_template_stroke.set_direction(True)
 
-        # If the directional vector between the starting and end point is similar
-        if check_end_points(current_input_stroke, current_template_stroke):
-            compare_vectors(current_input_stroke, current_template_stroke)
-        else:
-            print("   Stroke does not match")
+        compare_strokes(current_input_stroke, current_template_stroke)
+        if current_input_stroke.get_shape():
+            matched_stroke_indexes.append(stroke_index)
     
+    # if len(matched_stroke_indexes) < input_kanji.get_strokes_length():
+
     print(current_input_stroke.get_size())
     return find_score()
+
+def compare_strokes(input_stroke: Stroke, template_stroke: Stroke):
+    if check_count_vectors(input_stroke, template_stroke):
+        input_stroke.set_count(True)
+    template_stroke.set_count(True)
+
+    if check_size(input_stroke, template_stroke):
+        input_stroke.set_size(True)
+    template_stroke.set_size(True)
+
+    # If the directional vector between the starting and end point is similar
+    if check_end_points(input_stroke, template_stroke):
+        compare_vectors(input_stroke, template_stroke)
+    else:
+        print("   Stroke does not match")
 
 def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
         # If the strokes consist of an equal number of vectors
@@ -69,7 +68,9 @@ def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
             # If the shape is similar
             if check_shape(input_stroke, template_stroke):
                 input_stroke.set_shape(True)
+                template_stroke.set_shape(True)
                 input_stroke.set_shape_score(10)
+                input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
                 print("   Shape score:          10/10")
                 print("   Stroke matches!")
             else:
@@ -166,7 +167,6 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
         template_vector = template_stroke.get_point(point)
         size.append(abs(input_vector[1] / template_vector[1]))
     
-    print(size)
     if len(size) < 2:
         return True  # Single point or no size comparison needed
     

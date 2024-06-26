@@ -5,12 +5,13 @@ class Stroke:
     def __init__(self, stroke):
         self.set_stroke(stroke)
 
+        self.order = None
         self.direction = False
-        self.order = False
         self.count = False
         self.size = False
         self.shape = False
         self.shape_score = 0
+        self.index = None
     
     def set_stroke(self, stroke):
         self.stroke = stroke
@@ -79,7 +80,21 @@ class Stroke:
 
     def get_shape_score(self):
         return self.shape_score
+            
+    def set_index(self, index):
+        self.index = index
+
+    def get_index(self):
+        return self.index
     
+    def reverse_strokes(self):
+        self.reverse_stroke = self.stroke
+        self.stroke = self.find_reverse_stroke(self.stroke)
+        self.vector_stroke = self.find_vector_stroke(self.stroke)
+        self.polar_stroke = self.find_polar_stroke(self.vector_stroke)
+        self.direction_vector = self.find_direction_vector(self.stroke[0], self.stroke[-1])
+        self.reverse_direction_vector = self.find_direction_vector(self.reverse_stroke[0], self.reverse_stroke[-1])
+
     @staticmethod
     def find_reverse_stroke(stroke):
         reverse_stroke = []
@@ -125,8 +140,10 @@ class Kanji:
         self.count = False
         self.strokes = []
 
-        for vectors in strokes:
+        for index in range(len(strokes)):
+            vectors = strokes[index]
             self.add_stroke(vectors)
+            self.get_stroke(index).set_index(index)
 
     def get_input(self):
         return self.input
