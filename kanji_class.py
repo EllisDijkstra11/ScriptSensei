@@ -8,6 +8,7 @@ class Stroke:
         self.direction = False
         self.order = False
         self.count = False
+        self.size = False
         self.shape = False
         self.shape_score = 0
     
@@ -15,9 +16,7 @@ class Stroke:
         self.stroke = stroke
         self.reverse_stroke = self.find_reverse_stroke(self.stroke)
         self.vector_stroke = self.find_vector_stroke(self.stroke)
-        self.reverse_vector_stroke = self.find_vector_stroke(self.reverse_stroke)
         self.polar_stroke = self.find_polar_stroke(self.vector_stroke)
-        self.reverse_polar_stroke = self.find_polar_stroke(self.reverse_vector_stroke)
         self.direction_vector = self.find_direction_vector(self.stroke[0], self.stroke[-1])
         self.reverse_direction_vector = self.find_direction_vector(self.reverse_stroke[0], self.reverse_stroke[-1])
 
@@ -25,22 +24,16 @@ class Stroke:
         return self.stroke
     
     def get_point(self, index):
-        return self.stroke[index]
+        return self.polar_stroke[index]
     
     def get_reverse_stroke(self):
         return self.reverse_stroke
 
     def get_vector_stroke(self):
         return self.vector_stroke
-    
-    def get_reverse_vector_stroke(self):
-        return self.reverse_vector_stroke
 
     def get_polar_stroke(self):
         return self.polar_stroke
-    
-    def get_reverse_polar_stroke(self):
-        return self.reverse_polar_stroke
     
     def get_direction_vector(self):
         return self.direction_vector
@@ -68,6 +61,12 @@ class Stroke:
 
     def get_count(self):
         return self.count
+    
+    def set_size(self, size):
+        self.size = size
+    
+    def get_size(self):
+        return self.size
             
     def set_shape(self, shape):
         self.shape = shape

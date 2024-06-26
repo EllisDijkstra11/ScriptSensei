@@ -21,7 +21,7 @@ wrong_order_data = [
 
 wrong_shape_data = [
     [[0, 0], [1, 1]],      # First stroke of input kanji
-    [[2, 2], [3, 4]]       # Second stroke of input kanji with different shape
+    [[2, 3], [3, 6]]       # Second stroke of input kanji with different shape
 ]
 
 too_few_strokes_data = [
@@ -42,6 +42,16 @@ too_many_strokes_data_wrong_order = [
     [[4, 4], [5, 5]],   # Extra third stroke
     [[0, 0], [1, 1]],  # First stroke of input kanji
     [[2, 2], [3, 3]]  # Second stroke of input kanji
+]
+
+different_scaling_data = [
+    [[0, 0], [2, 2]],     # First stroke scaled differently
+    [[4, 4], [6, 6]]      # Second stroke scaled differently
+]
+
+uniform_scaling_data = [
+    [[0, 0], [2, 2]],     # First stroke uniformly scaled
+    [[4, 4], [8, 8]]      # Second stroke uniformly scaled
 ]
 
 template_data = [
@@ -107,35 +117,27 @@ class TestStrokeTypes(unittest.TestCase):
 class TestKanjiComparison(unittest.TestCase):
     
     def setUp(self):
-        global input_data, template_data
+        global correct_data, template_data
 
-        kanji.input_kanji = Kanji(input_data)
+        kanji.input_kanji = Kanji(correct_data)
         kanji.template_kanji = Kanji(template_data)
 
-    def test_scaling(self):
-        tolerance = 1e-6
-        kanji.compare_kanji(input_data, template_data)
-        self.assertAlmostEqual(kanji.scale, 1, delta=tolerance)
-
-        kanji.compare_kanji(input_data, wrong_data)
-        self.assertAlmostEqual(kanji.scale, 3, delta=tolerance)
-
     def test_compare_kanji(self):
-        global input_data, template_data, wrong_data
+        global correct_data, template_data, wrong_data
 
-        kanji.compare_kanji(input_data, template_data)
+        kanji.compare_kanji(correct_data, template_data)
         self.assertTrue(kanji.input_kanji.get_count())
         self.assertTrue(kanji.template_kanji.get_count())
         
-        kanji.compare_kanji(input_data, wrong_data)
+        kanji.compare_kanji(correct_data, wrong_data)
         self.assertFalse(kanji.input_kanji.get_count())
         self.assertTrue(kanji.template_kanji.get_count())
 
     def test_check_count(self):
         self.assertEqual(kanji.check_count(), 0)
 
-        global input_data, wrong_data
-        kanji.input_kanji = Kanji(input_data)
+        global correct_data, wrong_data
+        kanji.input_kanji = Kanji(correct_data)
         kanji.template_kanji = Kanji(wrong_data)
         
         self.assertLess(kanji.check_count(), 0)
@@ -146,8 +148,8 @@ class TestKanjiComparison(unittest.TestCase):
 
         self.assertTrue(kanji.check_count_vectors(input_stroke, template_stroke))
 
-        global input_data, wrong_data
-        kanji.input_kanji = Kanji(input_data)
+        global correct_data, wrong_data
+        kanji.input_kanji = Kanji(correct_data)
         kanji.template_kanji = Kanji(wrong_data)
 
         input_stroke = kanji.input_kanji.get_stroke(0)
@@ -161,8 +163,8 @@ class TestKanjiComparison(unittest.TestCase):
 
         self.assertTrue(kanji.check_direction(input_stroke, template_stroke))
 
-        global input_data, wrong_data
-        kanji.input_kanji = Kanji(input_data)
+        global correct_data, wrong_data
+        kanji.input_kanji = Kanji(correct_data)
         kanji.template_kanji = Kanji(wrong_data)
 
         input_stroke = kanji.input_kanji.get_stroke(0)
@@ -200,21 +202,9 @@ class TestCheckShape(unittest.TestCase):
         
         self.assertFalse(kanji.check_shape(input_stroke, template_stroke))
 
-    def test_check_shape_false_due_to_length(self):
-        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
-        template_stroke = Stroke([[0, 1], [np.pi/4, 2 + kanji.length_tolerance*1.1], [np.pi/2, 3]])
-        
-        self.assertFalse(kanji.check_shape(input_stroke, template_stroke))
-
     def test_check_shape_edge_case_angle_tolerance(self):
         input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
         template_stroke = Stroke([[0, 1], [np.pi/4 + kanji.angle_tolerance/2, 2], [np.pi/2, 3]])
-        
-        self.assertTrue(kanji.check_shape(input_stroke, template_stroke))
-
-    def test_check_shape_edge_case_length_tolerance(self):
-        input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
-        template_stroke = Stroke([[0, 1], [np.pi/4, 2 + kanji.length_tolerance/2], [np.pi/2, 3]])
         
         self.assertTrue(kanji.check_shape(input_stroke, template_stroke))
 
@@ -225,6 +215,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def compare_and_assert(self, input_data, template_data, expected_output):
         kanji.compare_kanji(input_data, template_data)
+        
         self.assertEqual(kanji.input_kanji.get_count(), expected_output['count'])
         self.assertEqual(kanji.template_kanji.get_count(), True)  # Template is always correct
 
@@ -234,6 +225,7 @@ class TestStrokeMistakes(unittest.TestCase):
             self.assertEqual(input_stroke.get_direction(), expected_stroke['direction'])
             self.assertEqual(input_stroke.get_shape(), expected_stroke['shape'])
             self.assertEqual(input_stroke.get_count(), expected_stroke['count'])
+            self.assertEqual(input_stroke.get_size(), expected_stroke['size'])
 
             # Check if the print statements match the expected output
             self.assertEqual(input_stroke.get_shape_score(), expected_stroke.get('shape_score', 0))
@@ -242,8 +234,8 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': True,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
             ]
         }
         self.compare_and_assert(correct_data, correct_data, expected_output)
@@ -252,8 +244,8 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': True,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': False, 'shape': False, 'count': True, 'shape_score': 0}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': False, 'shape': False, 'count': True, 'shape_score': 0, 'size': True}
             ]
         }
         self.compare_and_assert(wrong_direction_data, correct_data, expected_output)
@@ -262,8 +254,8 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': True,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
             ]
         }
         self.compare_and_assert(wrong_order_data, correct_data, expected_output)
@@ -272,8 +264,8 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': True,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': True, 'shape': False, 'count': True, 'shape_score': 0}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': False, 'count': True, 'shape_score': 0, 'size': True}
             ]
         }
         self.compare_and_assert(wrong_shape_data, correct_data, expected_output)
@@ -282,7 +274,7 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': False,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
             ]
         }
         self.compare_and_assert(too_few_strokes_data, correct_data, expected_output)
@@ -291,9 +283,9 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': False,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': False}
             ]
         }
         self.compare_and_assert(too_many_strokes_data, correct_data, expected_output)
@@ -302,7 +294,7 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': False,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
             ]
         }
         self.compare_and_assert(too_few_strokes_data_wrong_order, correct_data, expected_output)
@@ -311,10 +303,38 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': False,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
-                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
-                # {'direction': None, 'shape': None, 'count': None}
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': True}
             ]
         }
         self.compare_and_assert(too_many_strokes_data_wrong_order, correct_data, expected_output)
+
+    def test_different_scaling_factor(self):
+        correct_data = [
+            [[0, 0], [1, 1], [4, 4]],  # First stroke of input kanji
+            [[2, 2], [3, 3], [4, 4]]   # Second stroke of input kanji
+        ]
+
+        different_scaling_data = [
+            [[0, 0], [2, 2], [8, 8]],     # First stroke scaled differently
+            [[4, 4], [6, 6], [10, 10]]      # Second stroke scaled differently
+        ]
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},  # Direction should match, shape should not
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': False}   # Direction should match, shape should not
+            ]
+        }
+        self.compare_and_assert(different_scaling_data, correct_data, expected_output)
+
+    def test_uniform_scaling_factor(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
+            ]
+        }
+        self.compare_and_assert(uniform_scaling_data, correct_data, expected_output)
