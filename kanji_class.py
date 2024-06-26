@@ -154,6 +154,7 @@ class Kanji:
         self.input = False
         self.count = False
         self.strokes = []
+        self.size = []
 
         for index in range(len(strokes)):
             vectors = strokes[index]
@@ -190,3 +191,16 @@ class Kanji:
     
     def get_count(self):
         return self.count
+    
+    def add_size(self, size):
+        self.size.append[size]
+    
+    def get_size(self, size_tolerance):
+        count = 0
+        average = sum(self.size) / len(self.size)  # Calculate average size
+
+        for point in self.size:
+            if abs(point - average) < size_tolerance:
+                count += 1
+    
+        return count / len(self.size)

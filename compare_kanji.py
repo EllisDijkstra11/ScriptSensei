@@ -76,9 +76,6 @@ def compare_strokes(input_stroke: Stroke, template_stroke: Stroke):
     if check_count_vectors(input_stroke, template_stroke):
         input_stroke.set_count(True)
 
-    if check_size(input_stroke, template_stroke):
-        input_stroke.set_size(True)
-
     # If the directional vector between the starting and end point is similar
     if check_end_points(input_stroke, template_stroke):
         compare_vectors(input_stroke, template_stroke)
@@ -93,43 +90,17 @@ def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
                 input_stroke.set_shape(True)
                 template_stroke.set_shape(True)
                 input_stroke.set_shape_score(10)
-                input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
+                input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())    
+
+                if check_size(input_stroke, template_stroke):
+                    input_stroke.set_size(True)
+
                 print("   Shape score:          10/10")
                 print("   Stroke matches!")
             else:
                 delete_points(input_stroke, template_stroke)
         else:
             delete_points(input_stroke, template_stroke)
-
-def find_scale():
-    global input_kanji, template_kanji, scale
-
-    input_x, input_y = find_min_max(input_kanji)
-    template_x, template_y = find_min_max(template_kanji)
-    
-    scale_x = template_x / input_x
-    scale_y = template_y / input_y
-
-    scale = min(scale_x, scale_y)
-
-def find_min_max(kanji):
-    all_points = [point for stroke in kanji.get_strokes() for point in stroke.get_stroke()]
-    all_x = [point[0] for point in all_points]
-    all_y = [point[1] for point in all_points]
-
-    min_x = min(all_x)
-    max_x = max(all_x)
-    min_y = min(all_y)
-    max_y = max(all_y)
-
-    return max_x - min_x, max_y - min_y
-
-def scale_kanji():
-    global input_kanji, scale
-
-    for stroke in input_kanji.get_strokes():
-        scaled_stroke = [[point[0] * scale, point[1] * scale] for point in stroke.get_stroke()]
-        stroke.set_stroke(scaled_stroke)
 
 def check_count():
     global input_kanji, template_kanji
@@ -180,6 +151,8 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
     return True
 
 def check_size(input_stroke: Stroke, template_stroke: Stroke):
+    global input_kanji
+
     if input_stroke.get_stroke_length() != template_stroke.get_stroke_length():
         return False
     
@@ -194,6 +167,7 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
         return True  # Single point or no size comparison needed
     
     average = sum(size) / len(size)  # Calculate average size
+    input_kanji.add_size(average)
 
     for point in size:
         if abs(point - average) > size_tolerance:
@@ -234,6 +208,10 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
         template_stroke.set_shape(True)
         input_stroke.set_shape_score((longest_match / input_stroke.get_stroke_length()) * 10)
         input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
+            
+        if check_size(input_stroke, template_stroke):
+            input_stroke.set_size(True)
+
         print("   Shape score:          " + str(int(input_stroke.get_shape_score())) + "/10")
         print("   Stroke matches!")
      
@@ -272,9 +250,11 @@ def find_temp_vectors(points):
     return subsets
 
 def find_score():
+    global size_tolerance
     score = []
 
     count = input_kanji.get_count()
+    size = input_kanji.get_size(size_tolerance)
     direction = []
     order = []
     shape = []
@@ -286,6 +266,7 @@ def find_score():
         shape.append(stroke.get_shape_score())
     
     score.append(count)
+    score.append(size)
     score.append(direction)
     score.append(order)
     score.append(shape)
