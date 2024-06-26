@@ -36,25 +36,48 @@ def compare_kanji(input_array, template_array):
             current_input_stroke.set_direction(True)
         else:
             current_input_stroke.reverse_strokes()
-        current_template_stroke.set_direction(True)
 
         compare_strokes(current_input_stroke, current_template_stroke)
         if current_input_stroke.get_shape():
             matched_stroke_indexes.append(stroke_index)
     
-    # if len(matched_stroke_indexes) < input_kanji.get_strokes_length():
+    for stroke_index in range(input_kanji.get_strokes_length()):
+        if not stroke_index in matched_stroke_indexes:
+            current_input_stroke: Stroke = input_kanji.get_stroke(stroke_index)
+            current_input_stroke.set_false()
+            best_index = None
+            best_score = 0
 
-    print(current_input_stroke.get_size())
+            for template_index in range(template_kanji.get_strokes_length()):
+                current_template_stroke: Stroke = template_kanji.get_stroke(template_index)
+                if not current_template_stroke.get_shape():
+                    if check_direction(current_input_stroke, current_template_stroke):
+                        current_input_stroke.set_direction(True)
+                    else:
+                        current_input_stroke.reverse_strokes()
+                
+                    compare_strokes(current_input_stroke, current_template_stroke)
+                    if current_input_stroke.get_shape():
+                        current_score = current_input_stroke.get_shape_score()
+                        if current_score > best_score:
+                            best_score = current_score
+                            best_index = template_index
+
+                current_input_stroke.set_false()
+        
+            if not best_index == None:
+                current_template_stroke: Stroke = template_kanji.get_stroke(best_index)
+                compare_strokes(current_input_stroke, current_template_stroke)
+
+
     return find_score()
 
 def compare_strokes(input_stroke: Stroke, template_stroke: Stroke):
     if check_count_vectors(input_stroke, template_stroke):
         input_stroke.set_count(True)
-    template_stroke.set_count(True)
 
     if check_size(input_stroke, template_stroke):
         input_stroke.set_size(True)
-    template_stroke.set_size(True)
 
     # If the directional vector between the starting and end point is similar
     if check_end_points(input_stroke, template_stroke):
@@ -181,12 +204,7 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
 def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     global angle_tolerance
 
-    input_vector = None
-    if input_stroke.get_direction():
-        input_vector = input_stroke.get_direction_vector()
-    else:
-        input_vector = input_stroke.get_reverse_direction_vector()
-
+    input_vector = input_stroke.get_direction_vector()
     template_vector = template_stroke.get_direction_vector()
 
     angle_difference = abs(input_vector[0] - template_vector[0])
@@ -213,7 +231,9 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
     
     if longest_match != 0:
         input_stroke.set_shape(True)
+        template_stroke.set_shape(True)
         input_stroke.set_shape_score((longest_match / input_stroke.get_stroke_length()) * 10)
+        input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
         print("   Shape score:          " + str(int(input_stroke.get_shape_score())) + "/10")
         print("   Stroke matches!")
      

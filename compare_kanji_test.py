@@ -245,7 +245,7 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': True,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
-                {'direction': False, 'shape': False, 'count': True, 'shape_score': 0, 'size': True}
+                {'direction': False, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
             ]
         }
         self.compare_and_assert(wrong_direction_data, correct_data, expected_output)
@@ -265,7 +265,7 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': True,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
-                {'direction': True, 'shape': False, 'count': True, 'shape_score': 0, 'size': True}
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': False}
             ]
         }
         self.compare_and_assert(wrong_shape_data, correct_data, expected_output)
@@ -294,7 +294,7 @@ class TestStrokeMistakes(unittest.TestCase):
         expected_output = {
             'count': False,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+                {'direction': False, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
             ]
         }
         self.compare_and_assert(too_few_strokes_data_wrong_order, correct_data, expected_output)
@@ -305,7 +305,7 @@ class TestStrokeMistakes(unittest.TestCase):
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
-                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': True}
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': False}
             ]
         }
         self.compare_and_assert(too_many_strokes_data_wrong_order, correct_data, expected_output)

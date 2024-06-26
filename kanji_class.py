@@ -12,6 +12,7 @@ class Stroke:
         self.shape = False
         self.shape_score = 0
         self.index = None
+        self.reversed_strokes = False
     
     def set_stroke(self, stroke):
         self.stroke = stroke
@@ -88,12 +89,26 @@ class Stroke:
         return self.index
     
     def reverse_strokes(self):
+        self.reversed_strokes = True
         self.reverse_stroke = self.stroke
         self.stroke = self.find_reverse_stroke(self.stroke)
         self.vector_stroke = self.find_vector_stroke(self.stroke)
         self.polar_stroke = self.find_polar_stroke(self.vector_stroke)
         self.direction_vector = self.find_direction_vector(self.stroke[0], self.stroke[-1])
         self.reverse_direction_vector = self.find_direction_vector(self.reverse_stroke[0], self.reverse_stroke[-1])
+    
+    def set_false(self):
+        if self.reversed_strokes:
+            self.reverse_strokes()
+
+        self.order = None
+        self.direction = False
+        self.count = False
+        self.size = False
+        self.shape = False
+        self.shape_score = 0
+        self.index = None
+        self.reversed_strokes = False
 
     @staticmethod
     def find_reverse_stroke(stroke):
