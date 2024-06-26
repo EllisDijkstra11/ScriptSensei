@@ -9,6 +9,7 @@ class Stroke:
         self.order = False
         self.count = False
         self.shape = False
+        self.shape_score = 0
     
     def set_stroke(self, stroke):
         self.stroke = stroke
@@ -73,6 +74,12 @@ class Stroke:
 
     def get_shape(self):
         return self.shape
+            
+    def set_shape_score(self, shape_score):
+        self.shape_score = shape_score
+
+    def get_shape_score(self):
+        return self.shape_score
     
     @staticmethod
     def find_reverse_stroke(stroke):
@@ -132,6 +139,12 @@ class Kanji:
     def get_stroke(self, index):
         if 0 <= index < len(self.strokes):
             return self.strokes[index]
+        else:
+            raise IndexError("Stroke index out of range")
+
+    def get_reverse_stroke(self, index):
+        if 0 <= index < len(self.strokes):
+            return self.strokes[index].get_reverse_stroke()
         else:
             raise IndexError("Stroke index out of range")
     

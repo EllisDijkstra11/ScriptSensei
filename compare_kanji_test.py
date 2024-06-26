@@ -4,9 +4,44 @@ from kanji_class import Stroke, Kanji
 import compare_kanji as kanji
 
 # Sample data for testing
-input_data = [
+correct_data = [
     [[0, 0], [1, 1]],  # First stroke of input kanji
     [[2, 2], [3, 3]]   # Second stroke of input kanji
+]
+
+wrong_direction_data = [
+    [[0, 0], [1, 1]],  # First stroke of input kanji
+    [[3, 3], [2, 2]]   # Second stroke of input kanji in wrong direction
+]
+
+wrong_order_data = [
+    [[2, 2], [3, 3]],  # First stroke of input kanji
+    [[0, 0], [1, 1]]   # Second stroke of input kanji in wrong order
+]
+
+wrong_shape_data = [
+    [[0, 0], [1, 1]],      # First stroke of input kanji
+    [[2, 2], [3, 4]]       # Second stroke of input kanji with different shape
+]
+
+too_few_strokes_data = [
+    [[0, 0], [1, 1]]   # Only one stroke instead of two
+]
+
+too_many_strokes_data = [
+    [[0, 0], [1, 1]],  # First stroke of input kanji
+    [[2, 2], [3, 3]],  # Second stroke of input kanji
+    [[4, 4], [5, 5]]   # Extra third stroke
+]
+
+too_few_strokes_data_wrong_order = [
+    [[3, 3], [2, 2]]   # Only one stroke instead of two
+]
+
+too_many_strokes_data_wrong_order = [
+    [[4, 4], [5, 5]]   # Extra third stroke
+    [[0, 0], [1, 1]],  # First stroke of input kanji
+    [[2, 2], [3, 3]],  # Second stroke of input kanji
 ]
 
 template_data = [
@@ -182,3 +217,106 @@ class TestCheckShape(unittest.TestCase):
         template_stroke = Stroke([[0, 1], [np.pi/4, 2 + kanji.length_tolerance/2], [np.pi/2, 3]])
         
         self.assertTrue(kanji.check_shape(input_stroke, template_stroke))
+
+class TestStrokeMistakes(unittest.TestCase):
+    
+    def setUp(self):
+        self.kanji_template = Kanji(correct_data)
+
+    def compare_and_assert(self, input_data, template_data, expected_output):
+        kanji.compare_kanji(input_data, template_data)
+        self.assertEqual(kanji.input_kanji.get_count(), expected_output['count'])
+        self.assertEqual(kanji.template_kanji.get_count(), True)  # Template is always correct
+
+        for i, expected_stroke in enumerate(expected_output['strokes']):
+            input_stroke = kanji.input_kanji.get_stroke(i)
+
+            self.assertEqual(input_stroke.get_direction(), expected_stroke['direction'])
+            self.assertEqual(input_stroke.get_shape(), expected_stroke['shape'])
+            self.assertEqual(input_stroke.get_count(), expected_stroke['count'])
+
+            # Check if the print statements match the expected output
+            self.assertEqual(input_stroke.get_shape_score(), expected_stroke.get('shape_score', 0))
+
+    def test_correct_kanji(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10}
+            ]
+        }
+        self.compare_and_assert(correct_data, correct_data, expected_output)
+
+    def test_wrong_direction(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': False, 'shape': False, 'count': True, 'shape_score': 0}
+            ]
+        }
+        self.compare_and_assert(wrong_direction_data, correct_data, expected_output)
+
+    def test_wrong_order(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10}
+            ]
+        }
+        self.compare_and_assert(wrong_order_data, correct_data, expected_output)
+
+    def test_wrong_shape(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': False, 'count': True, 'shape_score': 0}
+            ]
+        }
+        self.compare_and_assert(wrong_shape_data, correct_data, expected_output)
+
+    def test_too_few_strokes(self):
+        expected_output = {
+            'count': False,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
+            ]
+        }
+        self.compare_and_assert(too_few_strokes_data, correct_data, expected_output)
+
+    def test_too_many_strokes(self):
+        expected_output = {
+            'count': False,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
+            ]
+        }
+        self.compare_and_assert(too_many_strokes_data, correct_data, expected_output)
+
+    def test_too_few_strokes_wrong_order(self):
+        expected_output = {
+            'count': False,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
+            ]
+        }
+        self.compare_and_assert(too_few_strokes_data_wrong_order, correct_data, expected_output)
+
+    def test_too_many_strokes_wrong_order(self):
+        expected_output = {
+            'count': False,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10},
+                {'direction': False, 'shape': False, 'count': False, 'shape_score': 0}
+                # {'direction': None, 'shape': None, 'count': None}
+            ]
+        }
+        self.compare_and_assert(too_many_strokes_data_wrong_order, correct_data, expected_output)
