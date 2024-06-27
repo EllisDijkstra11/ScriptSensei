@@ -107,7 +107,6 @@ class Stroke:
         self.size = False
         self.shape = False
         self.shape_score = 0
-        self.index = None
         self.reversed_strokes = False
 
     @staticmethod

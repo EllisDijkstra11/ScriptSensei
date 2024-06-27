@@ -233,7 +233,7 @@ class TestStrokeMistakes(unittest.TestCase):
             self.assertEqual(input_stroke.get_size(), expected_stroke['size'])
 
             # Check if the print statements match the expected output
-            self.assertEqual(input_stroke.get_shape_score(), expected_stroke.get('shape_score', 0))
+            self.assertEqual(int(input_stroke.get_shape_score()), expected_stroke.get('shape_score', 0))
 
     def test_correct_kanji(self):
         expected_output = {
@@ -329,7 +329,7 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': True,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},  # Direction should match, shape should not
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': False}   # Direction should match, shape should not
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': int(20/3), 'size': True}   # Direction should match, shape should not
             ]
         }
         self.compare_and_assert(different_scaling_data, correct_data, expected_output)

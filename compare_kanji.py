@@ -47,6 +47,7 @@ def compare_kanji(input_array, template_array):
             current_input_stroke.set_false()
             best_index = None
             best_score = 0
+            longest = 0
 
             for template_index in range(template_kanji.get_strokes_length()):
                 current_template_stroke: Stroke = template_kanji.get_stroke(template_index)
@@ -59,9 +60,15 @@ def compare_kanji(input_array, template_array):
                     compare_strokes(current_input_stroke, current_template_stroke)
                     if current_input_stroke.get_shape():
                         current_score = current_input_stroke.get_shape_score()
+                        current_length = current_input_stroke.get_direction_vector()[1]
                         if current_score > best_score:
                             best_score = current_score
                             best_index = template_index
+                            longest = current_length
+                        elif current_score == best_score and current_length > longest:
+                            best_score = current_score
+                            best_index = template_index
+                            longest = current_length
 
                 current_input_stroke.set_false()
         
@@ -91,8 +98,10 @@ def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
                 input_stroke.set_shape_score(10)
                 input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())    
 
-                if check_size(input_stroke, template_stroke):
+                size = check_size(input_stroke, template_stroke)
+                if not size == 0:
                     input_stroke.set_size(True)
+                    input_kanji.add_size(size)
 
                 print("   Shape score:          10/10")
                 print("   Stroke matches!")
@@ -148,10 +157,12 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
         if min(angle_difference, 2 * np.pi - angle_difference) > angle_tolerance:
             return False
 
+    if check_size(input_stroke, template_stroke) == 0:
+        return False
     return True
 
 def check_size(input_stroke: Stroke, template_stroke: Stroke):
-    global input_kanji, size_tolerance
+    global size_tolerance
     
     size = []
     for point in range(input_stroke.get_stroke_length() - 1):
@@ -160,7 +171,6 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
         size.append(abs(input_vector[1] / template_vector[1]))
     
     average = sum(size) / len(size)  # Calculate average size
-    input_kanji.add_size(average)
     
     if len(size) < 2:
         return True  # Single point or no size comparison needed
@@ -168,9 +178,9 @@ def check_size(input_stroke: Stroke, template_stroke: Stroke):
     for point in size:
         print("size:", abs(point - average))
         if abs(point - average) > size_tolerance:
-            return False
+            return 0
     
-    return True
+    return average
 
 def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     global angle_tolerance
@@ -186,6 +196,8 @@ def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     return False
 
 def delete_points(input_stroke: Stroke, template_stroke: Stroke):
+    global input_kanji
+
     input_stroke_stroke = input_stroke.get_stroke()
     template_stroke_stroke = template_stroke.get_stroke()
     temp_input_strokes = find_temp_stroke(input_stroke_stroke)
@@ -195,9 +207,11 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
     longest_temp_input = None
     longest_temp_template = None
     for temp_input_stroke in temp_input_strokes:
+        temp_input = Stroke(temp_input_stroke)
+        temp_input.set_index(input_stroke.get_index())
         for temp_template_stroke in temp_template_strokes:
-            temp_input = Stroke(temp_input_stroke)
             temp_template = Stroke(temp_template_stroke)
+            temp_template.set_index(template_stroke.get_index())
             if check_shape(temp_input, temp_template):
                 current_match = len(temp_input_stroke)
                 if current_match > longest_match:
@@ -211,8 +225,10 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
         input_stroke.set_shape_score((longest_match / input_stroke.get_stroke_length()) * 10)
         input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
             
-        if check_size(longest_temp_input, longest_temp_template):
+        size = check_size(longest_temp_input, longest_temp_template)
+        if not size == 0:
             input_stroke.set_size(True)
+            input_kanji.add_size(size)
 
         print("   Shape score:          " + str(int(input_stroke.get_shape_score())) + "/10")
         print("   Stroke matches!")
@@ -229,8 +245,10 @@ def find_best_matching_strokes(input_stroke: Stroke, template_stroke: Stroke):
 
     for input_subset in input_subsets:
         for template_subset in template_subsets:
-            input_subset_stroke = Stroke(input_subset)
-            template_subset_stroke = Stroke(template_subset)
+            input_subset_stroke = Stroke(input_stroke)
+            input_subset_stroke.set_index(input_subset.get_index())
+            template_subset_stroke = Stroke(template_stroke)
+            template_subset_stroke.set_index(template_subset.get_index())
             if check_shape(input_subset_stroke, template_subset_stroke):
                 points_kept = len(input_subset)
                 if points_kept > max_points_kept:
