@@ -150,8 +150,7 @@ class Stroke:
 
 class Kanji:
     def __init__(self, strokes):
-        self.input = False
-        self.count = False
+        self.count = 0
         self.strokes = []
         self.size = []
 
@@ -159,9 +158,6 @@ class Kanji:
             vectors = strokes[index]
             self.add_stroke(vectors)
             self.get_stroke(index).set_index(index)
-
-    def get_input(self):
-        return self.input
 
     def add_stroke(self, vectors):
         stroke = Stroke(vectors)

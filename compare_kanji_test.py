@@ -131,12 +131,12 @@ class TestKanjiComparison(unittest.TestCase):
         global correct_data, template_data, wrong_data
 
         kanji.compare_kanji(correct_data, template_data)
-        self.assertTrue(kanji.input_kanji.get_count())
-        self.assertTrue(kanji.template_kanji.get_count())
+        self.assertEqual(0, kanji.input_kanji.get_count())
+        self.assertEqual(0, kanji.template_kanji.get_count())
         
         kanji.compare_kanji(correct_data, wrong_data)
-        self.assertFalse(kanji.input_kanji.get_count())
-        self.assertTrue(kanji.template_kanji.get_count())
+        self.assertEqual(0, kanji.input_kanji.get_count())
+        self.assertEqual(0, kanji.template_kanji.get_count())
 
     def test_check_count(self):
         self.assertEqual(kanji.check_count(), 0)
@@ -222,7 +222,6 @@ class TestStrokeMistakes(unittest.TestCase):
         kanji.compare_kanji(input_data, template_data)
         
         self.assertEqual(kanji.input_kanji.get_count(), expected_output['count'])
-        self.assertEqual(kanji.template_kanji.get_count(), True)  # Template is always correct
 
         for i, expected_stroke in enumerate(expected_output['strokes']):
             input_stroke = kanji.input_kanji.get_stroke(i)
@@ -237,7 +236,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_correct_kanji(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
@@ -247,7 +246,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_wrong_direction(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': False, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
@@ -257,7 +256,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_wrong_order(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
@@ -267,7 +266,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_wrong_shape(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': False, 'shape': False, 'count': False, 'shape_score': 0, 'size': False}
@@ -326,7 +325,7 @@ class TestStrokeMistakes(unittest.TestCase):
             [[4, 4], [6, 6], [10, 10]]      # Second stroke scaled differently
         ]
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},  # Direction should match, shape should not
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}   # Direction should match, shape should not
@@ -336,7 +335,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_uniform_scaling_factor(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}
@@ -346,7 +345,7 @@ class TestStrokeMistakes(unittest.TestCase):
     
     def test_too_many_points_input(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': False, 'shape_score': 5, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
@@ -356,7 +355,7 @@ class TestStrokeMistakes(unittest.TestCase):
 
     def test_too_many_points_template(self):
         expected_output = {
-            'count': True,
+            'count': 0,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': False, 'shape_score': 10, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},

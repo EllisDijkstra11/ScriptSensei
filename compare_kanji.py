@@ -20,8 +20,7 @@ def compare_kanji(input_array, template_array):
     difference_number_of_strokes = check_count()
     # Checks for the whole kanji
     if difference_number_of_strokes == 0:
-        input_kanji.set_count(True)
-    template_kanji.set_count(True)
+        input_kanji.set_count(difference_number_of_strokes)
     
     matched_stroke_indexes = []
     for stroke_index in range(min(input_kanji.get_strokes_length(), template_kanji.get_strokes_length())):

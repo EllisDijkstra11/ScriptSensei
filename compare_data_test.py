@@ -27,7 +27,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[11.0, 54.25], [20.73, 54.75], [89.31, 49.51], [96.88, 50.0]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -40,7 +40,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[25.25, 32.4], [31.8, 32.769999999999996], [73.04, 29.009999999999998], [79.25, 29.369999999999997]], [[12.0, 80.75], [21.09, 81.25], [88.58, 76.51], [96.88, 77.0]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': int(20/3)},
@@ -55,7 +55,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[25.25, 32.4], [31.8, 32.769999999999996], [73.04, 29.009999999999998], [79.25, 29.369999999999997]], [[12.0, 80.75], [21.09, 81.25], [88.58, 76.51], [96.88, 77.0]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -69,7 +69,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[27.5, 23.65], [36.9, 23.709999999999997], [75.87, 20.139999999999997], [85.01, 20.369999999999997]], [[28.75, 55.14], [38.39, 55.34], [73.12, 52.220000000000006], [81.25, 52.52]], [[13.0, 87.83], [24.75, 88.55], [85.87, 84.47999999999999], [96.62, 85.25999999999999]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': int(20/3)},
@@ -85,7 +85,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[27.5, 23.65], [36.9, 23.709999999999997], [75.87, 20.139999999999997], [85.01, 20.369999999999997]], [[28.75, 55.14], [38.39, 55.34], [73.12, 52.220000000000006], [81.25, 52.52]], [[13.0, 87.83], [24.75, 88.55], [85.87, 84.47999999999999], [96.62, 85.25999999999999]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': int(20/3)},
@@ -107,7 +107,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[23.64, 36.26], [25.34, 38.8], [28.72, 57.459999999999994], [29.5, 62.239999999999995]], [[25.76, 38.04], [79.5, 33.5], [83.13, 37.75], [79.06, 55.07]], [[30.0, 60.0], [74.75999999999999, 56.51], [80.55, 56.11]], [[52.51, 16.12], [54.18, 20.11], [54.22, 83.74000000000001]], [[22.75, 89.75], [27.0, 91.0], [81.75, 78.5]], [[74.96, 69.87], [89.46, 90.37]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -129,7 +129,7 @@ class TestDataKanji(unittest.TestCase):
         ]
         template_data = [[[31.75, 24.75], [33.24, 29.0], [33.24, 89.0]], [[34.48, 26.0], [74.5, 22.5], [79.5, 26.75], [79.01, 89.0]], [[33.72, 55.5], [55.97, 54.0], [63.19, 53.45]], [[33.98, 86.75], [78.78999999999999, 84.25]]]
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -153,7 +153,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[21.0, 20.25], [27.17, 20.75], [81.86, 15.01], [87.5, 15.5]], [[36.68, 22.5], [38.32, 27.23], [37.99, 69.25]], [[40.0, 35.5], [54.58, 34.0], [59.33, 33.45]], [[39.5, 51.25], [54.22, 49.87], [58.769999999999996, 49.37]], [[17.5, 71.0], [21.0, 72.5], [79.75, 61.75]], [[71.25, 18.5], [72.5, 22.0], [72.75, 95.5]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -179,7 +179,7 @@ class TestDataKanji(unittest.TestCase):
         ]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 5},
@@ -198,7 +198,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[19.38, 48.25], [26.979999999999997, 48.74], [77.19, 42.44], [84.5, 42.769999999999996]], [[49.5, 18.0], [50.49, 24.32], [18.0, 91.75]], [[49.5, 46.0], [86.99000000000001, 89.28], [94.00000000000001, 93.25]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -222,7 +222,7 @@ class TestDataKanji(unittest.TestCase):
             ]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -261,7 +261,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[51.75, 11.88], [50.95, 16.72], [14.5, 58.0]], [[52.25, 18.25], [89.46000000000001, 50.92], [95.00000000000001, 53.75]], [[34.02, 47.08], [39.620000000000005, 47.29], [63.61, 44.65], [69.76, 44.769999999999996]], [[30.18, 64.96], [36.65, 65.08], [68.0, 62.55], [74.96, 62.629999999999995]], [[51.47, 48.82], [52.36, 53.25], [52.58, 93.07]], [[31.0, 74.75], [39.5, 86.75]], [[73.01, 72.11], [72.47, 75.62], [63.0, 86.0]], [[18.5, 94.86], [27.869999999999997, 95.01], [79.38, 92.01], [88.75999999999999, 92.60000000000001]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -293,7 +293,7 @@ class TestDataKanji(unittest.TestCase):
         ]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -313,7 +313,7 @@ class TestDataKanji(unittest.TestCase):
         template_data = [[[54.75, 48.75], [52.68, 53.37], [14.5, 88.0]], [[36.5, 20.0], [85.31, 82.08], [94.75, 88.5]]]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
@@ -342,7 +342,7 @@ class TestDataKanji(unittest.TestCase):
             ]
 
         expected_output = {
-            'count': True,
+            'count': 0,
             'size': 10,
             'strokes': [
                 {'direction': False, 'shape': False, 'order': None, 'shape_score': 0},
