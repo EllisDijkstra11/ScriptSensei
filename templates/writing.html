@@ -170,40 +170,72 @@
 
             // Clear previous results
             tableHead.innerHTML = '<th> </th>';
-            tableBody.innerHTML = '';
+    tableBody.innerHTML = '';
 
-            // Determine the number of strokes based on directions (or any other array, as they should all have the same length)
-            var numStrokes = directions.length;
+    // Determine the number of strokes based on directions (or any other array, as they should all have the same length)
+    var numStrokes = directions.length;
 
-            // Populate the header row with stroke numbers
-            for (var i = 0; i < numStrokes; i++) {
-                var headerCell = document.createElement('th');
-                headerCell.innerText = i + 1;
-                tableHead.appendChild(headerCell);
-            }
+    // Populate the header row with stroke numbers
+    for (var i = 0; i < numStrokes; i++) {
+        var headerCell = document.createElement('th');
+        var headerButton = document.createElement('button');
+        headerButton.innerText = i + 1;
+        headerButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+        headerCell.appendChild(headerButton);
+        tableHead.appendChild(headerCell);
+    }
 
-            // Populate the table body with direction, order, and shape data
-            var directionRow = document.createElement('tr');
-            var orderRow = document.createElement('tr');
-            var shapeRow = document.createElement('tr');
+    // Create rows for directions, orders, and shapes
+    var directionRow = document.createElement('tr');
+    var orderRow = document.createElement('tr');
+    var shapeRow = document.createElement('tr');
 
-            for (var i = 0; i < numStrokes; i++) {
-                var directionCell = document.createElement('td');
-                directionCell.innerText = directions[i];
-                directionRow.appendChild(directionCell);
+    // Add row headers
+    var directionHeader = document.createElement('td');
+    var directionHeaderButton = document.createElement('button');
+    directionHeaderButton.innerText = 'Direction';
+    directionHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+    directionHeader.appendChild(directionHeaderButton);
+    directionRow.appendChild(directionHeader);
 
-                var orderCell = document.createElement('td');
-                orderCell.innerText = orders[i];
-                orderRow.appendChild(orderCell);
+    var orderHeader = document.createElement('td');
+    var orderHeaderButton = document.createElement('button');
+    orderHeaderButton.innerText = 'Order';
+    orderHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+    orderHeader.appendChild(orderHeaderButton);
+    orderRow.appendChild(orderHeader);
 
-                var shapeCell = document.createElement('td');
-                shapeCell.innerText = shapes[i];
-                shapeRow.appendChild(shapeCell);
-            }
+    var shapeHeader = document.createElement('td');
+    var shapeHeaderButton = document.createElement('button');
+    shapeHeaderButton.innerText = 'Shape';
+    shapeHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+    shapeHeader.appendChild(shapeHeaderButton);
+    shapeRow.appendChild(shapeHeader);
 
-            tableBody.appendChild(directionRow);
-            tableBody.appendChild(orderRow);
-            tableBody.appendChild(shapeRow);
+    // Populate the rows with data
+    for (var i = 0; i < numStrokes; i++) {
+        var directionCell = document.createElement('td');
+        var directionButton = document.createElement('button');
+        directionButton.innerText = directions[i];
+        directionCell.appendChild(directionButton);
+        directionRow.appendChild(directionCell);
+
+        var orderCell = document.createElement('td');
+        var orderButton = document.createElement('button');
+        orderButton.innerText = orders[i] || 'not found';
+        orderCell.appendChild(orderButton);
+        orderRow.appendChild(orderCell);
+
+        var shapeCell = document.createElement('td');
+        var shapeButton = document.createElement('button');
+        shapeButton.innerText = shapes[i];
+        shapeCell.appendChild(shapeButton);
+        shapeRow.appendChild(shapeCell);
+    }
+
+    tableBody.appendChild(orderRow);
+    tableBody.appendChild(directionRow);
+    tableBody.appendChild(shapeRow);
 
             // Display the count and size in the popup info
             document.getElementById('countButton').innerHTML = `${count}`;

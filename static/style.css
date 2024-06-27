@@ -304,24 +304,34 @@ path, polyline {
   border-radius: 10px;
 }
 .popup table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  border-color: white;
+  padding: 0px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  
+  button {
+    margin: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  }
 }
 .popup table, .popup th, .popup td {
-    border: 1px solid #ddd;
+  border: none;
 }
+
 .popup th, .popup td {
-    padding: 8px;
-    text-align: center;
+  padding: 8px;
+  text-align: center;
 }
 .popup button {
-    width: 100%;
-    right: 0px;
-    font-size: var(--normal);
-    line-height: var(--normal);
-    height: 45px;
-  }
-  
+  width: 100%;
+  font-size: var(--normal);
+  line-height: var(--normal);
+  height: 45px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
   .popup .flexbox {
     display: flex;
     flex-direction: row;
