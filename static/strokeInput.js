@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let curvatureCertainty = normalizeCertainty(findCurvatureCertainty(curvaturePoints,path));
     
     let bestFit = findBestFit(path, minimalFit, speedCertainty, curvatureCertainty).path;
-    console.log(bestFit)
+    console.log("Best Fit:", bestFit)
     let bestFitArray = []
 
     for (let i = 0; i < bestFit.length; i++) {
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     bestFits.push(bestFitArray)
-    console.log(bestFits)
+    console.log("Best Fits:", bestFits)
 
     displayBestFit(bestFit);
   }
@@ -390,7 +390,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function findBestFit(path, minimalFit, speed, curvature) {
-    // console.log('minaimal fit:', minimalFit.length, 'speed:', speed.length, 'curvature:', curvature.length)
     let currentSpeedPath = minimalFit;
     for (let i = -1; i < speed.length; i++) {
 
@@ -400,18 +399,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
       let currentCurvaturePath = currentSpeedPath;
       for (let j = -1; j < curvature.length; j++) {
-
-        if (j >= 0) {
-          currentCurvaturePath = currentCurvaturePath.concat(curvature[j]);
+        if (!(i + j > 10)) {
+          if (j >= 0) {
+            currentCurvaturePath = currentCurvaturePath.concat(curvature[j]);
+          }
+          
+          currentCurvaturePath.sort((first, second) => first.index - second.index);
+          let fitError = findError(path, currentCurvaturePath);
+          allFits.push({ path: currentCurvaturePath, error: fitError });
         }
-        
-        currentCurvaturePath.sort((first, second) => first.index - second.index);
-        // console.log(currentCurvaturePath)
-        let fitError = findError(path, currentCurvaturePath);
-        allFits.push({ path: currentCurvaturePath, error: fitError });
       }
     }
-    // console.log('all fits no filter:', allFits);
     
     let newFits = allFits.filter(fit => fit.error < errorThreshold);
     if (newFits.length != 0) {
@@ -423,7 +421,6 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         return first.error - second.error;
       }});
-    // console.log('all fits filter:', allFits);
     
     let finalFits = []
     while (allFits.length != 0) {
@@ -432,17 +429,14 @@ document.addEventListener('DOMContentLoaded', function () {
       allFits = allFits.filter(fit => fit.path.length > currentPath.path.length);
     }
 
-    // console.log("final fits:", finalFits);
     return finalFits[0];
 
     finalFits.sort((first, second) => first.error - second.error);
     for (let i = 0; i < finalFits.length - 1; i++) {
       if (finalFits[i + 1].error - finalFits[i].error > 5) {
-        // console.log('final fit:', finalFits[i])
         return finalFits[i]
       }
     }
-    // console.log("final fit:", finalFits[finalFits.length - 1])
     return finalFits[finalFits.length - 1]
   }
 

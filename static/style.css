@@ -243,10 +243,10 @@ path, polyline {
   stroke-miterlimit: 10;
 }
 
-.table-condensed > tbody >tr > td, 
-.table-condensed > tbody >tr > th, 
-.table-condensed > thead >tr > td, 
-.table-condensed > thead >tr > th {
+.grid.table-condensed > tbody >tr > td, 
+.grid.table-condensed > tbody >tr > th, 
+.grid.table-condensed > thead >tr > td, 
+.grid.table-condensed > thead >tr > th {
   padding: 1px 4px;
 }
 
@@ -278,4 +278,47 @@ path, polyline {
 .content {  
   position: relative;
   height: 100%;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  width: 750px;
+  height: 900px;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  padding: 10px;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+.popup table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.popup table, .popup th, .popup td {
+    border: 1px solid #ddd;
+}
+.popup th, .popup td {
+    padding: 8px;
+    text-align: center;
+}
+.popup button {
+    display: block;
+    /* flex-direction: column; */
+    width: 60%;
+    right: 0px;
+    font-size: var(--normal);
+    line-height: var(--normal);
+    height: 40px;
+    margin: 5px;
+    /* padding: 10px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer; */
 }

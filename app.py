@@ -42,7 +42,6 @@ def writing():
 
 @app.route('/check_kanji', methods=['POST'])
 def check_kanji():
-    print("I'm here")
     data = request.json
     kanji = data.get('kanji')
     input_array = data.get('array')
@@ -54,11 +53,9 @@ def check_kanji():
         template_array.append(svgPathToPoints(path))
 
     print("input_data =", input_array)
-    print("\n")
     print("template_data =", template_array)
     feedback = compare_kanji(input_array, template_array)
-    print(feedback)
-    return feedback
+    return jsonify({'score': feedback})
 
 if __name__ == "__main__":
     app.run(debug=True)

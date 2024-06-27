@@ -40,6 +40,39 @@
 
         <div id="kanjiCharacter" data-kanji="{{ kanji_character }}"></div>
         <div id="svgResult"></div>
+
+        <div class="popup" id="resultPopup">
+            <h1>
+                Feedback
+            </h1>
+            <div id="countInfo">
+                Number of strokes:
+                <button id="countButton"></button>
+            </div>
+            <div id="sizeInfo">
+                Size difference:
+                <button id="sizeButton"></button>
+            </div>
+            <table id="resultTable">
+                <thead>
+                    <tr>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Direction</td>
+                    </tr>
+                    <tr>
+                        <td>Order</td>
+                    </tr>
+                    <tr>
+                        <td>Shape</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
     </div>
 
     <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script> -->
@@ -65,7 +98,6 @@
 
         document.getElementById('check_kanji').addEventListener('click', () => {
             check_kanji(currentKanji);
-            showRandomKanji();
         });
 
         function showRandomKanji() {
@@ -102,10 +134,71 @@
                     document.getElementById('svgResult').innerText = data.error;
                 } else {
                     document.getElementById('svgResult').innerHTML = data.svg;
+                    showPopup(data.score);
                 }
             })
             .catch(error => console.error('Error:', error));
         }
+
+        function showPopup(score) {
+            var count = score[0];
+            var size = score[1];
+            var directions = score[2];
+            var orders = score[3];
+            var shapes = score[4];
+            var tableHead = document.getElementById('resultTable').querySelector('thead tr');
+            var tableBody = document.getElementById('resultTable').querySelector('tbody');
+            var resultInfo = document.getElementById('resultInfo');
+
+            // Clear previous results
+            tableHead.innerHTML = '<th> </th>';
+            tableBody.innerHTML = '';
+
+            // Determine the number of strokes based on directions (or any other array, as they should all have the same length)
+            var numStrokes = directions.length;
+
+            // Populate the header row with stroke numbers
+            for (var i = 0; i < numStrokes; i++) {
+                var headerCell = document.createElement('th');
+                headerCell.innerText = i + 1;
+                tableHead.appendChild(headerCell);
+            }
+
+            // Populate the table body with direction, order, and shape data
+            var directionRow = document.createElement('tr');
+            var orderRow = document.createElement('tr');
+            var shapeRow = document.createElement('tr');
+
+            for (var i = 0; i < numStrokes; i++) {
+                var directionCell = document.createElement('td');
+                directionCell.innerText = directions[i];
+                directionRow.appendChild(directionCell);
+
+                var orderCell = document.createElement('td');
+                orderCell.innerText = orders[i];
+                orderRow.appendChild(orderCell);
+
+                var shapeCell = document.createElement('td');
+                shapeCell.innerText = shapes[i];
+                shapeRow.appendChild(shapeCell);
+            }
+
+            tableBody.appendChild(directionRow);
+            tableBody.appendChild(orderRow);
+            tableBody.appendChild(shapeRow);
+
+            // Display the count and size in the popup info
+            countInfo.querySelector('button').innerHTML = `${count}`;
+            sizeInfo.querySelector('button').innerHTML = `${size}/10`;
+
+            // Display the popup
+            document.getElementById('resultPopup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('resultPopup').style.display = 'none';
+        }
+
     </script>
 </body>
 
