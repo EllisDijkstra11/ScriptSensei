@@ -41,7 +41,7 @@ body {
   font-size: var(--normal);
   line-height: var(--normal);
   text-align: center;
-  
+
   background-color: var(--light-blue);
 }
 
@@ -62,6 +62,7 @@ body {
   background-color: white;
   border: 10px solid white;
   border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -103,6 +104,7 @@ p {
   
   background-color: var(--darkest-blue);
   border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   
   text-align: center;
 }
@@ -113,6 +115,7 @@ p {
   
   float: right;
   padding: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   
   background-color: white;
   border-radius: 10px;
@@ -130,6 +133,7 @@ p {
   
   border-width: 0px;
   border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   
   font-size: var(--larger);
   line-height: var(--larger);
@@ -148,6 +152,7 @@ button {
   
   border: none;
   border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   
   background-color: var(--dark-pink);
   color: black;
@@ -168,6 +173,7 @@ button:disabled {
   background-color: white;
   color: grey;
   border: 2px solid grey;
+  box-shadow: none;
 }
 
 .clicked {
@@ -184,10 +190,6 @@ button:disabled {
   column-gap: 10px;
 }
 
-.number {
-  font-family: 'Christmas Day', sans-serif;
-}
-
 .overview {
   width: 100%;
   height: 150px;
@@ -200,6 +202,8 @@ button:disabled {
   border-radius: 10px;
   
   padding: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+
   
   .block {
     float: left;
@@ -210,6 +214,7 @@ button:disabled {
     line-height: var(--extra-large);
 
     color: var(--darkest-pink);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -259,6 +264,8 @@ path, polyline {
   border-radius: 10px;
   border-style: solid;
   border-width: 2px;
+  background-color: rgb(240);
+  margin-bottom: 10px;
 }
 
 /* Hopefully unnecessary */
@@ -294,6 +301,7 @@ path, polyline {
   background-color: white;
   z-index: 1000;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 .popup table {
     width: 100%;
@@ -307,18 +315,18 @@ path, polyline {
     text-align: center;
 }
 .popup button {
-    display: block;
-    /* flex-direction: column; */
-    width: 60%;
+    width: 100%;
     right: 0px;
     font-size: var(--normal);
     line-height: var(--normal);
-    height: 40px;
-    margin: 5px;
-    /* padding: 10px;
-    margin-top: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer; */
+    height: 45px;
+  }
+  
+  .popup .flexbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: fit-content;
 }

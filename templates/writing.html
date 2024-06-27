@@ -42,16 +42,26 @@
         <div id="svgResult"></div>
 
         <div class="popup" id="resultPopup">
-            <h1>
-                Feedback
-            </h1>
-            <div id="countInfo">
-                Number of strokes:
-                <button id="countButton"></button>
+            <div class="flexbox header" style="height: 175px; justify-content: center;">
+                <h1>
+                    Feedback
+                </h1>
             </div>
-            <div id="sizeInfo">
-                Size difference:
-                <button id="sizeButton"></button>
+            <div id="countInfo"  class="flexbox" style="text-align: left;">
+                <div>
+                    Number of strokes:
+                </div>
+                <div style = "width: 60%;">
+                    <button id="countButton"></button>
+                </div>
+            </div>
+            <div id="sizeInfo"  class="flexbox" style="text-align: left;">
+                <div>
+                    Size difference:
+                </div>
+                <div style = "width: 60%;">
+                    <button id="sizeButton"></button>
+                </div>
             </div>
             <table id="resultTable">
                 <thead>
@@ -71,6 +81,14 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="flexbox" style="text-align: left;">
+                <div style = "width: 47.5%;">
+                    <button id="sizeButton" style="background-color: var(--light-blue);">Repractise kanji</button>
+                </div>
+                <div style = "width: 47.5%;">
+                    <button id="sizeButton">Next kanji</button>
+                </div>
+            </div>
         </div>
     
     </div>
@@ -188,8 +206,8 @@
             tableBody.appendChild(shapeRow);
 
             // Display the count and size in the popup info
-            countInfo.querySelector('button').innerHTML = `${count}`;
-            sizeInfo.querySelector('button').innerHTML = `${size}/10`;
+            document.getElementById('countButton').innerHTML = `${count}`;
+            document.getElementById('sizeButton').innerHTML = `${size}/10`;
 
             // Display the popup
             document.getElementById('resultPopup').style.display = 'block';
