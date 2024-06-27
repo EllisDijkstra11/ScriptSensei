@@ -28,9 +28,9 @@ class TestDataKanji(unittest.TestCase):
 
         expected_output = {
             'count': True,
-            'size': 1,
+            'size': 10,
             'strokes': [
-                {'direction': True, 'shape': True, 'order': True, 'shape_score': 10},
+                {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
             ]
         }
         self.compare_and_assert(input_data, template_data, expected_output)

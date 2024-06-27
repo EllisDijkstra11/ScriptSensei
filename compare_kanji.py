@@ -151,23 +151,19 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
     return True
 
 def check_size(input_stroke: Stroke, template_stroke: Stroke):
-    global input_kanji
-
-    if input_stroke.get_stroke_length() != template_stroke.get_stroke_length():
-        return False
+    global input_kanji, size_tolerance
     
-    global size_tolerance
     size = []
     for point in range(input_stroke.get_stroke_length() - 1):
         input_vector = input_stroke.get_point(point)
         template_vector = template_stroke.get_point(point)
         size.append(abs(input_vector[1] / template_vector[1]))
     
-    if len(size) < 2:
-        return True  # Single point or no size comparison needed
-    
     average = sum(size) / len(size)  # Calculate average size
     input_kanji.add_size(average)
+    
+    if len(size) < 2:
+        return True  # Single point or no size comparison needed
 
     for point in size:
         print("size:", abs(point - average))
@@ -196,6 +192,8 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
     temp_template_strokes = find_temp_stroke(template_stroke_stroke)
 
     longest_match = 0
+    longest_temp_input = None
+    longest_temp_template = None
     for temp_input_stroke in temp_input_strokes:
         for temp_template_stroke in temp_template_strokes:
             temp_input = Stroke(temp_input_stroke)
@@ -204,6 +202,8 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
                 current_match = len(temp_input_stroke)
                 if current_match > longest_match:
                     longest_match = current_match
+                    longest_temp_input = temp_input
+                    longest_temp_template = temp_template
     
     if longest_match != 0:
         input_stroke.set_shape(True)
@@ -211,7 +211,7 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
         input_stroke.set_shape_score((longest_match / input_stroke.get_stroke_length()) * 10)
         input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
             
-        if check_size(input_stroke, template_stroke):
+        if check_size(longest_temp_input, longest_temp_template):
             input_stroke.set_size(True)
 
         print("   Shape score:          " + str(int(input_stroke.get_shape_score())) + "/10")

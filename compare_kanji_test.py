@@ -344,12 +344,22 @@ class TestStrokeMistakes(unittest.TestCase):
         }
         self.compare_and_assert(uniform_scaling_data, correct_data, expected_output)
     
-    def test_too_many_points(self):
+    def test_too_many_points_input(self):
         expected_output = {
-            'count': False,
+            'count': True,
             'strokes': [
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': 5, 'size': True},
+                {'direction': True, 'shape': True, 'count': False, 'shape_score': 5, 'size': True},
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
             ]
         }
         self.compare_and_assert(too_many_points_data, correct_data, expected_output)
+
+    def test_too_many_points_template(self):
+        expected_output = {
+            'count': True,
+            'strokes': [
+                {'direction': True, 'shape': True, 'count': False, 'shape_score': 10, 'size': True},
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},
+            ]
+        }
+        self.compare_and_assert(correct_data, too_many_points_data, expected_output)

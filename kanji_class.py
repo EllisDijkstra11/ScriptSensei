@@ -206,4 +206,4 @@ class Kanji:
             if abs(point - average) < size_tolerance:
                 count += 1
     
-        return count / len(self.size)
+        return (count / len(self.size)) * 10
