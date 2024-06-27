@@ -69,7 +69,6 @@ def compare_kanji(input_array, template_array):
                 current_template_stroke: Stroke = template_kanji.get_stroke(best_index)
                 compare_strokes(current_input_stroke, current_template_stroke)
 
-
     return find_score()
 
 def compare_strokes(input_stroke: Stroke, template_stroke: Stroke):
@@ -191,20 +190,20 @@ def check_end_points(input_stroke: Stroke, template_stroke: Stroke):
     return False
 
 def delete_points(input_stroke: Stroke, template_stroke: Stroke):
-    input_vectors = input_stroke.get_vector_stroke()
-    template_vectors = template_stroke.get_vector_stroke()
-    temp_input_vectors = find_temp_vectors(input_vectors)
-    temp_template_vectors = find_temp_vectors(template_vectors)
+    input_stroke_stroke = input_stroke.get_stroke()
+    template_stroke_stroke = template_stroke.get_stroke()
+    temp_input_strokes = find_temp_stroke(input_stroke_stroke)
+    temp_template_strokes = find_temp_stroke(template_stroke_stroke)
 
     longest_match = 0
-    for input_vector in temp_input_vectors:
-        for template_vector in temp_template_vectors:
-            temp_input = Stroke(input_vector)
-            temp_template = Stroke(template_vector)
+    for temp_input_stroke in temp_input_strokes:
+        for temp_template_stroke in temp_template_strokes:
+            temp_input = Stroke(temp_input_stroke)
+            temp_template = Stroke(temp_template_stroke)
             if check_shape(temp_input, temp_template):
-                current_match = len(input_vector)
+                current_match = len(temp_input_stroke)
                 if current_match > longest_match:
-                    longest_match = longest_match
+                    longest_match = current_match
     
     if longest_match != 0:
         input_stroke.set_shape(True)
@@ -219,11 +218,11 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
         print("   Stroke matches!")
      
 def find_best_matching_strokes(input_stroke: Stroke, template_stroke: Stroke):
-    input_points = [input_stroke.get_point(i) for i in range(input_stroke.get_stroke_length())]
-    template_points = [template_stroke.get_point(i) for i in range(template_stroke.get_stroke_length())]
+    input_points = input_stroke.get_stroke()
+    template_points = template_stroke.get_stroke()
 
-    input_subsets = find_temp_vectors(input_points)
-    template_subsets = find_temp_vectors(template_points)
+    input_subsets = find_temp_stroke(input_points)
+    template_subsets = find_temp_stroke(template_points)
 
     best_match = (input_stroke, template_stroke)
     max_points_kept = 0
@@ -240,12 +239,12 @@ def find_best_matching_strokes(input_stroke: Stroke, template_stroke: Stroke):
 
     return best_match
 
-def find_temp_vectors(points):
+def find_temp_stroke(points):
     length = len(points)
     if length <= 2:
         return [points]
 
-    subsets = []
+    subsets = [[points[0], points[-1]]]
     for r in range(length - 2, 0, -1):
         for subset in combinations(range(1, length - 1), r):
             subset_points = [points[0]] + [points[i] for i in subset] + [points[-1]]
