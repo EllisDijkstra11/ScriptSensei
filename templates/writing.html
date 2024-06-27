@@ -83,10 +83,10 @@
             </table>
             <div class="flexbox" style="text-align: left;">
                 <div style = "width: 47.5%;">
-                    <button id="sizeButton" style="background-color: var(--light-blue);">Repractise kanji</button>
+                    <button id="retryButton" style="background-color: var(--light-blue);">Repractise kanji</button>
                 </div>
                 <div style = "width: 47.5%;">
-                    <button id="sizeButton">Next kanji</button>
+                    <button id="nextButton">Next kanji</button>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script> -->
     <script src="../static/strokeInput.js" type="module"></script>
     <script type="module">
-        import bestFits from "../static/strokeInput.js"
+        import { bestFits, clearCanvas } from "../static/strokeInput.js"
         let selectedKanji;
         let totalNumberOfKanji;
         let currentRandomIndex = -1;
@@ -118,6 +118,17 @@
             check_kanji(currentKanji);
         });
 
+        document.getElementById('retryButton').addEventListener('click', () => {
+            closePopup();
+            clearCanvas();
+        });
+
+        document.getElementById('nextButton').addEventListener('click', () => {
+            selectedKanji.splice(currentRandomIndex, 1);
+            showRandomKanji();
+            closePopup();
+        });
+
         function showRandomKanji() {
             if (selectedKanji.length === 0) {
                 window.location.href = '/select';
@@ -132,7 +143,7 @@
             const meaning = randomKanji[1]
 
             document.getElementById('meaning_display').innerText = `${meaning}`;
-            selectedKanji.splice(currentRandomIndex, 1);
+
 
             console.log(randomKanji[0]);
             currentKanji = randomKanji[0];
@@ -222,7 +233,7 @@
 
         var orderCell = document.createElement('td');
         var orderButton = document.createElement('button');
-        orderButton.innerText = orders[i] || 'not found';
+        orderButton.innerText = orders[i];
         orderCell.appendChild(orderButton);
         orderRow.appendChild(orderCell);
 

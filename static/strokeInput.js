@@ -1,5 +1,25 @@
+let paths = [];
+let simplifiedPaths = [];
+let bestFitsSVG = [];
+let times = [];
+let allFits = [];
 let bestFits = [];
-export default bestFits;
+
+// Function to clear the canvas
+function clearCanvas() {
+  // Remove all paths from the canvas
+  paths.forEach(path => path.remove());
+  bestFitsSVG.forEach(path => path.remove());
+  
+  paths = [];
+  simplifiedPaths = [];
+  bestFitsSVG = [];
+  times = [];
+  allFits = [];
+  bestFits = [];
+}
+
+export {bestFits, clearCanvas};
 
 document.addEventListener('DOMContentLoaded', function () {
   // Get the IDs of interactive elements
@@ -8,11 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Initialize values
   let drawing = false;
-  let paths = [];
-  let simplifiedPaths = [];
-  let bestFitsSVG = [];
-  let times = [];
-  let allFits = [];
   let neighborhood = 3;
   let speedModifier = 0.6;
   let curveModifier = 1.5;
@@ -81,20 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Find the bending points of the simplified path
     findBendingPoints(d);  
-  }
-
-  // Function to clear the canvas
-  function clearCanvas() {
-    // Remove all paths from the canvas
-    paths.forEach(path => path.remove());
-    bestFitsSVG.forEach(path => path.remove());
-
-    paths = [];
-    simplifiedPaths = [];
-    bestFitsSVG = [];
-    times = [];
-    allFits = [];
-    bestFits = [];
   }
 
   // Get the drawn strokes
