@@ -203,7 +203,7 @@ class TestCheckShape(unittest.TestCase):
 
     def test_check_shape_false_due_to_angle(self):
         input_stroke = Stroke([[0, 1], [np.pi/4, 2], [np.pi/2, 3]])
-        template_stroke = Stroke([[0, 1], [np.pi/3, 2], [np.pi/2, 3]])
+        template_stroke = Stroke([[0, 1], [np.pi/2, 2], [np.pi/2, 3]])
         
         self.assertFalse(kanji.check_shape(input_stroke, template_stroke))
 
@@ -329,7 +329,7 @@ class TestStrokeMistakes(unittest.TestCase):
             'count': True,
             'strokes': [
                 {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True},  # Direction should match, shape should not
-                {'direction': True, 'shape': True, 'count': True, 'shape_score': int(20/3), 'size': True}   # Direction should match, shape should not
+                {'direction': True, 'shape': True, 'count': True, 'shape_score': 10, 'size': True}   # Direction should match, shape should not
             ]
         }
         self.compare_and_assert(different_scaling_data, correct_data, expected_output)

@@ -40,13 +40,6 @@ def overview():
 def writing():
     return render_template('writing.html', selectedKanji = selectedKanji)
 
-# @app.route("/test")
-# def test():
-#     send = request.args.get('selectedKanji')
-#     if selectedKanji:
-#         selectedKanji = json.loads(selectedKanji)
-#     return render_template('test.html', selectedKanji = selectedKanji)
-
 @app.route('/check_kanji', methods=['POST'])
 def check_kanji():
     print("I'm here")
@@ -66,8 +59,6 @@ def check_kanji():
     feedback = compare_kanji(input_array, template_array)
     print(feedback)
     return feedback
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

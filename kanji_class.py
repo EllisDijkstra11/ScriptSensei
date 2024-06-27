@@ -199,7 +199,7 @@ class Kanji:
             return 0
         
         count = 0
-        average = sum(self.size) / len(self.size)  # Calculate average size
+        average = sum(self.size) / len(self.size) 
 
         for point in self.size:
             if abs(point - average) < size_tolerance:
