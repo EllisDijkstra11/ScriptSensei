@@ -233,7 +233,7 @@ def find_score():
     print("\n\n\nChecking kanji")
 
     count = input_kanji.get_count()
-    size = input_kanji.get_size(size_tolerance)
+    size = int(input_kanji.get_size(size_tolerance))
     direction = []
     order = []
     shape = []
