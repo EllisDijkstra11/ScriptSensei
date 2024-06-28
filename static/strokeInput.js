@@ -19,20 +19,36 @@ function clearCanvas() {
   bestFits = [];
 }
 
-export {bestFits, clearCanvas};
+// Function to clear the canvas
+function removeLastStroke() {
+  if (bestFitsSVG.length == 0) {
+    return; // No strokes to remove
+  }
+  
+  // Also remove corresponding best fit SVG if present
+  const lastBestFit = bestFitsSVG.pop();
+  lastBestFit.parentNode.removeChild(lastBestFit);
+  
+  simplifiedPaths.pop();
+  times.pop();
+  allFits.pop();
+  bestFits.pop();
+  console.log(bestFits)
+}
+
+export {bestFits, clearCanvas, removeLastStroke};
 
 document.addEventListener('DOMContentLoaded', function () {
   // Get the IDs of interactive elements
   const canvas = document.getElementById('canvas');
-  const clearButton = document.getElementById('clear');
-
+  
   // Initialize values
   let drawing = false;
   let neighborhood = 3;
   let speedModifier = 0.6;
   let curveModifier = 1.5;
   let errorThreshold = 200;
-
+  
   // Set values for the physical appearance of the strokes
   const strokeWidth = 10;
 
@@ -41,9 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
   canvas.addEventListener('pointermove', draw);
   canvas.addEventListener('pointerup', endDrawing);
   canvas.addEventListener('pointerleave', endDrawing);
-
-  // Add an eventListener to clear the canvas
-  clearButton.addEventListener('click', clearCanvas);
 
   // Create a new path to store the stroke
   function startDrawing(event) {
