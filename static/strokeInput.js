@@ -33,7 +33,6 @@ function removeLastStroke() {
   times.pop();
   allFits.pop();
   bestFits.pop();
-  console.log(bestFits)
 }
 
 export {bestFits, clearCanvas, removeLastStroke};
@@ -222,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let curvatureCertainty = normalizeCertainty(findCurvatureCertainty(curvaturePoints,path));
     
     let bestFit = findBestFit(path, minimalFit, speedCertainty, curvatureCertainty).path;
-    console.log("Best Fit:", bestFit)
     let bestFitArray = []
 
     for (let i = 0; i < bestFit.length; i++) {
@@ -230,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     bestFits.push(bestFitArray)
-    console.log("Best Fits:", bestFits)
 
     displayBestFit(bestFit);
   }

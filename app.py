@@ -45,7 +45,14 @@ def check_kanji():
     data = request.json
     kanji = data.get('kanji')
     input_array = data.get('array')
-    kanji_path = commandFindSvg(kanji)
+
+    try:
+        kanji_path = commandFindSvg(kanji)
+    except FileNotFoundError:
+        return jsonify({'error': 'Kanji SVG file not found'}), 404
+    except Exception as e:
+        return jsonify({'error': f'Error finding SVG path: {str(e)}'}), 500
+
     svg_paths = extractSVGPaths(kanji_path)
 
     template_array = []

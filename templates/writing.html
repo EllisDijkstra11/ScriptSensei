@@ -9,13 +9,14 @@
 </head>
 
 <body>
-    <input type="hidden" id="bestFits"/>
+    <input type="hidden" id="bestFits" />
     <div class="main">
         <div class="header">
             <div class="block flexbox">
                 Number of kanji answered:
                 <div>
-                    <p style="line-height: var(--larger); font-size: var(--larger);"><span id="numberOfKanji"></span>/<span id="totalNumberOfKanji"></span>
+                    <p style="line-height: var(--larger); font-size: var(--larger);"><span
+                            id="numberOfKanji"></span>/<span id="totalNumberOfKanji"></span>
                     </p>
                 </div>
                 <button id="quit">Quit</button>
@@ -53,19 +54,19 @@
             <div class="block flexbox">
                 <span id="kanjiDisplay"></span>
             </div>
-            <div id="countInfo"  class="flexbox" style="text-align: left;">
+            <div id="countInfo" class="flexbox" style="text-align: left;">
                 <div>
                     Strokes offset:
                 </div>
-                <div style = "width: 60%;">
+                <div style="width: 60%;">
                     <button id="countButton"></button>
                 </div>
             </div>
-            <div id="sizeInfo"  class="flexbox" style="text-align: left;">
+            <div id="sizeInfo" class="flexbox" style="text-align: left;">
                 <div>
                     Size difference:
                 </div>
-                <div style = "width: 60%;">
+                <div style="width: 60%;">
                     <button id="sizeButton"></button>
                 </div>
             </div>
@@ -88,10 +89,10 @@
                 </tbody>
             </table>
             <div class="flexbox" style="text-align: left;">
-                <div style = "width: 47.5%;">
+                <div style="width: 47.5%;">
                     <button id="retryButton" style="background-color: var(--light-blue);">Repractise kanji</button>
                 </div>
-                <div style = "width: 47.5%;">
+                <div style="width: 47.5%;">
                     <button id="nextButton">Next kanji</button>
                 </div>
             </div>
@@ -120,13 +121,12 @@
             check_kanji(currentKanji);
         });
 
-          // Add an eventListener to clear the canvas
+        // Add an eventListener to clear the canvas
         document.getElementById('clear').addEventListener('click', () => {
             clearCanvas();
         });
 
         document.getElementById('remove').addEventListener('click', () => {
-            console.log("Happening")
             removeLastStroke();
         });
 
@@ -171,16 +171,17 @@
                 },
                 body: JSON.stringify({ kanji: kanji, array: bestFits })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    // document.getElementById('svgResult').innerText = data.error;
-                } else {
-                    // document.getElementById('svgResult').innerHTML = data.svg;
-                    showPopup(data.score);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error from server:', data.error);
+                        // document.getElementById('svgResult').innerText = data.error;
+                    } else {
+                        // document.getElementById('svgResult').innerHTML = data.svg;
+                        showPopup(data.score);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
 
         function showPopup(score) {
@@ -195,72 +196,72 @@
 
             // Clear previous results
             tableHead.innerHTML = '<th> </th>';
-    tableBody.innerHTML = '';
+            tableBody.innerHTML = '';
 
-    // Determine the number of strokes based on directions (or any other array, as they should all have the same length)
-    var numStrokes = directions.length;
+            // Determine the number of strokes based on directions (or any other array, as they should all have the same length)
+            var numStrokes = directions.length;
 
-    // Populate the header row with stroke numbers
-    for (var i = 0; i < numStrokes; i++) {
-        var headerCell = document.createElement('th');
-        var headerButton = document.createElement('button');
-        headerButton.innerText = i + 1;
-        headerButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
-        headerCell.appendChild(headerButton);
-        tableHead.appendChild(headerCell);
-    }
+            // Populate the header row with stroke numbers
+            for (var i = 0; i < numStrokes; i++) {
+                var headerCell = document.createElement('th');
+                var headerButton = document.createElement('button');
+                headerButton.innerText = i + 1;
+                headerButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+                headerCell.appendChild(headerButton);
+                tableHead.appendChild(headerCell);
+            }
 
-    // Create rows for directions, orders, and shapes
-    var directionRow = document.createElement('tr');
-    var orderRow = document.createElement('tr');
-    var shapeRow = document.createElement('tr');
+            // Create rows for directions, orders, and shapes
+            var directionRow = document.createElement('tr');
+            var orderRow = document.createElement('tr');
+            var shapeRow = document.createElement('tr');
 
-    // Add row headers
-    var directionHeader = document.createElement('td');
-    var directionHeaderButton = document.createElement('button');
-    directionHeaderButton.innerText = 'Direction';
-    directionHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
-    directionHeader.appendChild(directionHeaderButton);
-    directionRow.appendChild(directionHeader);
+            // Add row headers
+            var directionHeader = document.createElement('td');
+            var directionHeaderButton = document.createElement('button');
+            directionHeaderButton.innerText = 'Direction';
+            directionHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+            directionHeader.appendChild(directionHeaderButton);
+            directionRow.appendChild(directionHeader);
 
-    var orderHeader = document.createElement('td');
-    var orderHeaderButton = document.createElement('button');
-    orderHeaderButton.innerText = 'Order';
-    orderHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
-    orderHeader.appendChild(orderHeaderButton);
-    orderRow.appendChild(orderHeader);
+            var orderHeader = document.createElement('td');
+            var orderHeaderButton = document.createElement('button');
+            orderHeaderButton.innerText = 'Order offset';
+            orderHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+            orderHeader.appendChild(orderHeaderButton);
+            orderRow.appendChild(orderHeader);
 
-    var shapeHeader = document.createElement('td');
-    var shapeHeaderButton = document.createElement('button');
-    shapeHeaderButton.innerText = 'Shape';
-    shapeHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
-    shapeHeader.appendChild(shapeHeaderButton);
-    shapeRow.appendChild(shapeHeader);
+            var shapeHeader = document.createElement('td');
+            var shapeHeaderButton = document.createElement('button');
+            shapeHeaderButton.innerText = 'Shape';
+            shapeHeaderButton.style.backgroundColor = 'var(--light-blue)'; // Set background color
+            shapeHeader.appendChild(shapeHeaderButton);
+            shapeRow.appendChild(shapeHeader);
 
-    // Populate the rows with data
-    for (var i = 0; i < numStrokes; i++) {
-        var directionCell = document.createElement('td');
-        var directionButton = document.createElement('button');
-        directionButton.innerText = directions[i];
-        directionCell.appendChild(directionButton);
-        directionRow.appendChild(directionCell);
+            // Populate the rows with data
+            for (var i = 0; i < numStrokes; i++) {
+                var directionCell = document.createElement('td');
+                var directionButton = document.createElement('button');
+                directionButton.innerText = directions[i];
+                directionCell.appendChild(directionButton);
+                directionRow.appendChild(directionCell);
 
-        var orderCell = document.createElement('td');
-        var orderButton = document.createElement('button');
-        orderButton.innerText = orders[i];
-        orderCell.appendChild(orderButton);
-        orderRow.appendChild(orderCell);
+                var orderCell = document.createElement('td');
+                var orderButton = document.createElement('button');
+                orderButton.innerText = orders[i];
+                orderCell.appendChild(orderButton);
+                orderRow.appendChild(orderCell);
 
-        var shapeCell = document.createElement('td');
-        var shapeButton = document.createElement('button');
-        shapeButton.innerText = shapes[i];
-        shapeCell.appendChild(shapeButton);
-        shapeRow.appendChild(shapeCell);
-    }
+                var shapeCell = document.createElement('td');
+                var shapeButton = document.createElement('button');
+                shapeButton.innerText = String(shapes[i]) + '/10';
+                shapeCell.appendChild(shapeButton);
+                shapeRow.appendChild(shapeCell);
+            }
 
-    tableBody.appendChild(orderRow);
-    tableBody.appendChild(directionRow);
-    tableBody.appendChild(shapeRow);
+            tableBody.appendChild(orderRow);
+            tableBody.appendChild(directionRow);
+            tableBody.appendChild(shapeRow);
 
             // Display the count and size in the popup info
             document.getElementById('countButton').innerHTML = `${count}`;
