@@ -252,7 +252,7 @@ def find_score():
         stroke: Stroke = input_kanji.get_stroke(index)
         direction.append(stroke.get_direction())
         order.append(stroke.get_order())
-        shape.append(stroke.get_shape_score())
+        shape.append(int(stroke.get_shape_score()))
         print("\nCurrent stroke:       " + str(index))
         print("   Stroke direction:     " + str(direction[-1]))
         print("   Shape order:          " + str(order[-1]))
