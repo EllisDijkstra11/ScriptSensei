@@ -34,7 +34,10 @@
         </div>
 
         <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
-            <button id="clear" style="background-color: var(--light-blue);">Clear canvas</button>
+            <div style="display: flex; flex-direction: row; gap: 10px; width: 75%;">
+                <button id="remove" style="background-color: var(--light-blue);">Undo last stroke</button>
+                <button id="clear" style="background-color: var(--light-blue);">Clear canvas</button>
+            </div>
             <button id="check_kanji">Check kanji</button>
         </div>
 
@@ -47,9 +50,12 @@
                     Feedback
                 </h1>
             </div>
+            <div class="block flexbox">
+                <span id="kanjiDisplay"></span>
+            </div>
             <div id="countInfo"  class="flexbox" style="text-align: left;">
                 <div>
-                    Number of strokes:
+                    Strokes offset:
                 </div>
                 <div style = "width: 60%;">
                     <button id="countButton"></button>
@@ -74,7 +80,7 @@
                         <td>Direction</td>
                     </tr>
                     <tr>
-                        <td>Order</td>
+                        <td>Order offset</td>
                     </tr>
                     <tr>
                         <td>Shape</td>
@@ -90,15 +96,11 @@
                 </div>
             </div>
         </div>
-    
     </div>
 
-    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script> -->
-    <!-- <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?v=3"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script> -->
     <script src="../static/strokeInput.js" type="module"></script>
     <script type="module">
-        import { bestFits, clearCanvas } from "../static/strokeInput.js"
+        import { bestFits, clearCanvas, removeLastStroke } from "../static/strokeInput.js"
         let selectedKanji;
         let totalNumberOfKanji;
         let currentRandomIndex = -1;
@@ -118,6 +120,16 @@
             check_kanji(currentKanji);
         });
 
+          // Add an eventListener to clear the canvas
+        document.getElementById('clear').addEventListener('click', () => {
+            clearCanvas();
+        });
+
+        document.getElementById('remove').addEventListener('click', () => {
+            console.log("Happening")
+            removeLastStroke();
+        });
+
         document.getElementById('retryButton').addEventListener('click', () => {
             closePopup();
             clearCanvas();
@@ -126,6 +138,7 @@
         document.getElementById('nextButton').addEventListener('click', () => {
             selectedKanji.splice(currentRandomIndex, 1);
             showRandomKanji();
+            clearCanvas();
             closePopup();
         });
 
@@ -147,6 +160,7 @@
 
             console.log(randomKanji[0]);
             currentKanji = randomKanji[0];
+            document.getElementById('kanjiDisplay').innerText = currentKanji;
         }
 
         function check_kanji(kanji) {
@@ -160,9 +174,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    document.getElementById('svgResult').innerText = data.error;
+                    // document.getElementById('svgResult').innerText = data.error;
                 } else {
-                    document.getElementById('svgResult').innerHTML = data.svg;
+                    // document.getElementById('svgResult').innerHTML = data.svg;
                     showPopup(data.score);
                 }
             })
