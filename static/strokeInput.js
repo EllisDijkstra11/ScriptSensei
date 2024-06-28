@@ -492,3 +492,4 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.appendChild(path);
     return path;
   } 
+});
