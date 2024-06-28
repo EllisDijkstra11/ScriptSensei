@@ -327,6 +327,7 @@ path, polyline {
   text-align: center;
 }
 .popup button {
+  cursor: default;
   width: 100%;
   /* font-size: var(--normal);
   line-height: var(--normal); */
