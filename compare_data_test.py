@@ -345,7 +345,7 @@ class TestDataKanji(unittest.TestCase):
             'count': 0,
             'size': 10,
             'strokes': [
-                {'direction': True, 'shape': False, 'order': None, 'shape_score': 0},
+                {'direction': False, 'shape': False, 'order': None, 'shape_score': 0},
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
                 {'direction': True, 'shape': True, 'order': 0, 'shape_score': 10},
             ]

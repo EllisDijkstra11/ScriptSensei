@@ -77,9 +77,6 @@ def compare_kanji(input_array, template_array):
     return find_score()
 
 def compare_strokes(input_stroke: Stroke, template_stroke: Stroke):
-    if check_count_vectors(input_stroke, template_stroke):
-        input_stroke.set_count(True)
-
     # If the directional vector between the starting and end point is similar
     if check_end_points(input_stroke, template_stroke):
         compare_vectors(input_stroke, template_stroke)
@@ -111,12 +108,6 @@ def check_count():
     difference = input_kanji_length - template_kanji_length
 
     return difference
-
-def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
-    if input_stroke.get_stroke_length() == template_stroke.get_stroke_length():
-        return True
-
-    return False
 
 def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     angle_difference = abs(input_stroke.get_direction_vector()[0] - template_stroke.get_direction_vector()[0])
