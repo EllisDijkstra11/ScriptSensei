@@ -112,13 +112,10 @@ def check_count():
 def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     angle_difference = abs(input_stroke.get_direction_vector()[0] - template_stroke.get_direction_vector()[0])
     if angle_difference > 2 * np.pi:
-        angle_difference = 2 * np.pi - angle_difference
-    input_length = input_stroke.get_direction_vector()[1]
-    template_length = template_stroke.get_direction_vector()[1]
-
-    if input_length * template_length * np.cos(angle_difference) > 0:
+        angle_difference = angle_difference - 2 * np.pi
+    
+    if angle_difference < np.pi:
         return True
-
     return False
 
 def check_shape(input_stroke: Stroke, template_stroke: Stroke):
