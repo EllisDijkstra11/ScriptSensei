@@ -32,7 +32,7 @@ def compare_kanji(input_array, template_array):
             current_input_stroke.reverse_strokes()
 
         compare_strokes(current_input_stroke, current_template_stroke)
-        if current_input_stroke.get_shape():
+        if not current_input_stroke.get_shape() == None:
             matched_stroke_indexes.append(stroke_index)
     
     for stroke_index in range(input_kanji.get_strokes_length()):
@@ -45,15 +45,15 @@ def compare_kanji(input_array, template_array):
 
             for template_index in range(template_kanji.get_strokes_length()):
                 current_template_stroke: Stroke = template_kanji.get_stroke(template_index)
-                if not current_template_stroke.get_shape():
+                if current_template_stroke.get_shape() == None:
                     if check_direction(current_input_stroke, current_template_stroke):
                         current_input_stroke.set_direction(True)
                     else:
                         current_input_stroke.reverse_strokes()
                 
                     compare_strokes(current_input_stroke, current_template_stroke)
-                    if current_input_stroke.get_shape():
-                        current_score = current_input_stroke.get_shape_score()
+                    if not current_input_stroke.get_shape() == None:
+                        current_score = current_input_stroke.get_shape()
                         current_length = current_input_stroke.get_direction_vector()[1]
                         if current_score > best_score:
                             best_score = current_score
@@ -89,9 +89,8 @@ def compare_vectors(input_stroke: Stroke, template_stroke: Stroke):
         if input_stroke.get_count():
             # If the shape is similar
             if check_shape(input_stroke, template_stroke):
-                input_stroke.set_shape(True)
                 template_stroke.set_shape(True)
-                input_stroke.set_shape_score(10)
+                input_stroke.set_shape(10)
                 input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())    
 
                 size = check_size(input_stroke, template_stroke)
@@ -121,6 +120,8 @@ def check_count_vectors(input_stroke: Stroke, template_stroke: Stroke):
 
 def check_direction(input_stroke: Stroke, template_stroke: Stroke):
     angle_difference = abs(input_stroke.get_direction_vector()[0] - template_stroke.get_direction_vector()[0])
+    if angle_difference > 2 * np.pi:
+        angle_difference = 2 * np.pi - angle_difference
     input_length = input_stroke.get_direction_vector()[1]
     template_length = template_stroke.get_direction_vector()[1]
 
@@ -137,7 +138,7 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
         input_vector = input_stroke.get_point(point)
         template_vector = template_stroke.get_point(point)
         angle_difference = abs(input_vector[0] - template_vector[0])
-        if min(angle_difference, 2 * np.pi - angle_difference) > angle_tolerance:
+        if angle_difference > angle_tolerance:
             return False
 
     if check_size(input_stroke, template_stroke) == 0:
@@ -204,9 +205,8 @@ def delete_points(input_stroke: Stroke, template_stroke: Stroke):
                     longest_temp_template = temp_template
     
     if longest_match != 0:
-        input_stroke.set_shape(True)
         template_stroke.set_shape(True)
-        input_stroke.set_shape_score((longest_match / input_stroke.get_stroke_length()) * 10)
+        input_stroke.set_shape((longest_match / input_stroke.get_stroke_length()) * 10)
         input_stroke.set_order(template_stroke.get_index() - input_stroke.get_index())
             
         size = check_size(longest_temp_input, longest_temp_template)
@@ -251,7 +251,11 @@ def find_score():
         stroke: Stroke = input_kanji.get_stroke(index)
         direction.append(stroke.get_direction())
         order.append(stroke.get_order())
-        shape.append(int(stroke.get_shape_score()))
+        if not stroke.get_shape() == None:
+            shape.append(int(stroke.get_shape()))
+        else:
+            shape.append(0)
+
         print("\nCurrent stroke:       " + str(index))
         print("   Stroke direction:     " + str(direction[-1]))
         print("   Shape order:          " + str(order[-1]))

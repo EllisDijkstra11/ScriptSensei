@@ -116,45 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return paths; 
   };  
   
-  // Simplify the path with the Ramer-Douglas-Peucker algorithm
-  function simplifyPath(points, tolerance) {
-    // If the stroke can't be simplified anymore, return
-    if (points.length <= 2) {
-      return points;
-    }
-  
-    // Find the first and last point of the current stroke segment
-    const [firstPoint, lastPoint] = [points[0], points[points.length - 1]];
-
-    // Initialise values
-    let maxDistance = 0;
-    let index = 0;
-
-    // For each point in the current stroke,
-    for (let i = 1; i < points.length - 1; i++) {
-      // find the largest perpendicular distance to find the largest outlier
-      const distance = perpendicularDistance(points[i], firstPoint, lastPoint);
-
-      if (distance > maxDistance) {
-        maxDistance = distance;
-        index = i;
-      }
-    }
-
-    // If the largest outlier is larger than the tolerance,
-    if (maxDistance > tolerance) {
-      // reanalyse the left and the right parts of the stroke individually
-      const leftPath = simplifyPath(points.slice(0, index + 1), tolerance);
-      const rightPath = simplifyPath(points.slice(index), tolerance);
-
-      // then merge them without duplicating the largest outlier
-      return leftPath.slice(0, -1).concat(rightPath);
-    } else {
-      // else, return the simplified path
-      return [firstPoint, lastPoint];
-    }
-  }
-  
   // Calculate the distance between two points
   function calculateDistance(startPoint, endPoint) {
     const [x1, y1] = startPoint;
