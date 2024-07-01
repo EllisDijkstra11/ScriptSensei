@@ -133,27 +133,36 @@ def check_shape(input_stroke: Stroke, template_stroke: Stroke):
         return False
     return True
 
+# Check the size difference purely between matched strokes
 def check_size(input_stroke: Stroke, template_stroke: Stroke):
     global size_tolerance
     
     size = []
+    # For each point in the input stroke
     for point in range(input_stroke.get_stroke_length() - 1):
         input_vector = input_stroke.get_point(point)
         template_vector = template_stroke.get_point(point)
+
+        # Calculate the scale of the strokes
         size.append(abs(input_vector[1] / template_vector[1]))
     
     if len(size) == 0:
         return 0
     
-    average = sum(size) / len(size)  # Calculate average size
+    # Calculate the average of the scales
+    average = sum(size) / len(size)
     
+    # If there is only one size in the array, it's correctly scaled
     if len(size) < 2:
-        return average  # Single point or no size comparison needed
+        return average
 
+    # If the scale differs to much from the average
     for point in size:
         if abs(point - average) > size_tolerance:
+            # the size is incorrect
             return 0
     
+    # Else, return the average
     return average
 
 def check_end_points(input_stroke: Stroke, template_stroke: Stroke):

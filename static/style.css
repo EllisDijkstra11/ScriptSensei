@@ -176,7 +176,7 @@ button:disabled {
   box-shadow: none;
 }
 
-.clicked {
+.clicked, button.clicked:hover {
   background-color: var(--darkest-blue);
 }
 
@@ -352,4 +352,37 @@ path, polyline {
   font-size: 15rem;
   line-height: 15rem;
   margin-bottom: 10px;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: -1; /* Make sure it stays behind your content */
+  background-repeat: repeat-y;
+}
+
+.background::before,
+.background::after {
+  content: "";
+  width: 25%;
+  height: 100%;
+  
+  background-image: 
+    url('./Background.png'); /* Replace with your image path */
+  background-size: contain;
+  background-position: center;
+}
+
+.background::before {
+  /* transform: translateX(-190px); */
+}
+
+.background::after {
+  /* transform: translateX(100px) scaleX(-1); */
+  transform: scale(-1, -1);
 }
